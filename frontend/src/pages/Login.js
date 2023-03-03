@@ -4,7 +4,7 @@ import { Container, Button, Row, Col, Form, FormControl } from "react-bootstrap"
 
 export default function Login() {
   const [state, setState] = useState({
-    username: "",
+    email: "",
     password: "",
   });
 
@@ -15,12 +15,13 @@ export default function Login() {
     });
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = (event) => {
+    event.preventDefault();
     const userData = {
-      username: state.username,
+      email: state.email,
       password: state.password,
     };
-    console.log("Log in " + userData.username + " " + userData.password);
+    console.log("Log in " + userData.email + " " + userData.password);
   };
 
   return (
@@ -29,24 +30,24 @@ export default function Login() {
         <Col md="4">
           <h1>Login</h1>
           <Form onSubmit={handleSubmit}>
-            <Form.Group controlId="usernameId">
-              <Form.Label>User name</Form.Label>
+            <Form.Group controlId="formBasicEmail">
+              <Form.Label>Email</Form.Label>
               <Form.Control
-                type="text"
-                name="username"
-                placeholder="Enter user name"
-                value={state.username}
+                type="email"
+                name="email"
+                placeholder="Email address"
+                value={state.email}
                 onChange={handleChange}
               />
               <FormControl.Feedback type="invalid"></FormControl.Feedback>
             </Form.Group>
 
-            <Form.Group controlId="passwordId">
+            <Form.Group controlId="formBasicPassword">
               <Form.Label>Your password</Form.Label>
               <Form.Control
                 type="password"
                 name="password"
-                placeholder="Enter password"
+                placeholder="Password"
                 value={state.password}
                 onChange={handleChange}
               />

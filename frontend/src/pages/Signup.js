@@ -4,7 +4,7 @@ import { Container, Button, Row, Col, Form, FormControl } from "react-bootstrap"
 
 export default function Signup() {
   const [state, setState] = useState({
-    username: "",
+    email: "",
     password: "",
   });
 
@@ -15,12 +15,13 @@ export default function Signup() {
     });
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = (event) => {
+    event.preventDefault();
     const userData = {
-      username: state.username,
+      email: state.email,
       password: state.password,
     };
-    console.log("Sign up " + userData.username + " " + userData.password);
+    console.log("Sign up " + userData.email + " " + userData.password);
   };
 
   return (
@@ -29,20 +30,20 @@ export default function Signup() {
         <Col md="4">
           <h1>Sign up</h1>
           <Form onSubmit={handleSubmit}>
-            <Form.Group controlId="usernameId">
-              <Form.Label>User name</Form.Label>
+            <Form.Group controlId="formBasicEmail">
+              <Form.Label>Email</Form.Label>
               <Form.Control
-                type="text"
-                name="username"
-                placeholder="Enter user name"
-                value={state.username}
+                type="email"
+                name="email"
+                placeholder="Email address"
+                value={state.email}
                 onChange={handleChange}
               />
               <FormControl.Feedback type="invalid"></FormControl.Feedback>
             </Form.Group>
 
-            <Form.Group controlId="passwordId">
-              <Form.Label>Your password</Form.Label>
+            <Form.Group controlId="formBasicPassword">
+              <Form.Label>Password</Form.Label>
               <Form.Control
                 type="password"
                 name="password"
@@ -60,7 +61,7 @@ export default function Signup() {
             Already have account? <Link to="/login">Login</Link>
           </p>
         </Col>
-      </Row>{" "}
+      </Row>
     </Container>
   );
 }
