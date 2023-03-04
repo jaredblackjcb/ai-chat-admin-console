@@ -28,3 +28,8 @@ class CustomUser(AbstractUser):
     def gravatar_id(self) -> str:
         # https://en.gravatar.com/site/implement/hash/
         return hashlib.md5(self.email.lower().strip().encode('utf-8')).hexdigest()
+
+    # Override the save method to ensure that username is always equal to email
+    def save(self, *args, **kwargs):
+        self.username = self.email
+        super().save(*args, **kwargs)
