@@ -4,7 +4,7 @@ const userInfoFromStorage = localStorage.getItem("userInfo") ? JSON.parse(localS
 
 export const userSlice = createSlice({
   name: "user",
-  initialState: userInfoFromStorage,
+  initialState: { userInfo: userInfoFromStorage },
   reducers: {
     userLoginRequest(state) {
       return { loading: true };

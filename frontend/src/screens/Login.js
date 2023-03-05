@@ -13,22 +13,11 @@ export default function Login() {
 
   const dispatch = useDispatch();
   const navigate = useNavigate(); // TODO: Switch to redirect method instead of useNavigate()?
-  const userLogin = useSelector((state) =>
-    state.userLogin
-      ? state.userLogin
-      : {
-          userLogin: {
-            error: null,
-            loading: null,
-            userInfo: null,
-          },
-        }
-  );
-  const { error, loading, userInfo } = userLogin;
+  const { error, loading, userInfo } = useSelector((state) => state.userLogin) || {};
 
   useEffect(() => {
     console.log("Redirect useEffect called");
-    if (localStorage.getItem("userInfo")) {
+    if (userInfo) {
       console.log("Redirect to route: " + redirect);
       console.log("Redirect useEffect userInfo: " + userInfo);
       navigate(redirect);
