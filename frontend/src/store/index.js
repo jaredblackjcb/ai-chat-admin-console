@@ -1,33 +1,52 @@
-import { configureStore, createSlice } from "@reduxjs/toolkit";
-
-const someSlice = createSlice({
-  name: "something", // this is like the base route where the reducers live
-  initialState: [],
-  reducers: {
-    // used in store.dispatch({type: "sliceName/reducerName"})
-    addSomething(state, action) {
-      state.push(action.payload);
-    },
-    removeSomething(state, action) {
-      // Remove
-    },
-  },
-});
+import { configureStore } from "@reduxjs/toolkit";
+import { userSlice } from "../reducers/userReducers";
 
 export const store = configureStore({
   reducer: {
-    slice1: someSlice.reducer,
+    userLogin: userSlice.reducer,
   },
 });
 
 //Examples of modifying state
-const startingState = store.getState();
+// const startingState = store.getState();
 
-console.log(JSON.stringify(startingState));
+// console.log(JSON.stringify(startingState));
 
-store.dispatch({
-  type: "nothing/addSomething",
-  payload: "thing1",
-});
+// store.dispatch({
+//   type: "user/userLoginRequest",
+// });
 
-console.log(JSON.stringify(store.getState()));
+// console.log(JSON.stringify(store.getState()));
+
+// store.dispatch({
+//   type: "user/userLoginSuccess",
+//   payload: {
+//     id: 2,
+//     last_login: null,
+//     is_superuser: false,
+//     username: "jbtest0304.1@mailinator.com",
+//     first_name: "",
+//     last_name: "",
+//     email: "jbtest0304.1@mailinator.com",
+//     is_staff: false,
+//     is_active: true,
+//     date_joined: "2023-03-04T16:19:52.902879Z",
+//     avatar: null,
+//     groups: [],
+//     user_permissions: [],
+//   },
+// });
+// console.log(JSON.stringify(store.getState()));
+
+// store.dispatch({
+//   type: "user/userLoginFail",
+//   payload: {
+//     detail: "No active account found with the given credentials",
+//   },
+// });
+// console.log(JSON.stringify(store.getState()));
+
+// store.dispatch({
+//   type: "user/userLogout",
+// });
+// console.log(JSON.stringify(store.getState()));

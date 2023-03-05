@@ -1,13 +1,13 @@
 import React from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
-import Home from "./pages/Home";
-import Signup from "./pages/Signup";
-import Login from "./pages/Login";
-import Dashboard from "./pages/Dashboard";
-import ChangePassword from "./pages/ChangePassword";
-import ManageSubscription from "./pages/ManageSubscription";
-import Profile from "./pages/Profile";
+import Home from "./screens/Home";
+import Signup from "./screens/Signup";
+import Login from "./screens/Login";
+import Dashboard from "./screens/Dashboard";
+import ChangePassword from "./screens/ChangePassword";
+import ManageSubscription from "./screens/ManageSubscription";
+import Profile from "./screens/Profile";
 
 const router = createBrowserRouter([
   { path: "/", element: <Home /> },
