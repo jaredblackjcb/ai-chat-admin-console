@@ -7,22 +7,21 @@ import { useDispatch, useSelector } from "react-redux";
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
   const location = useLocation();
-  const redirect = location.search ? location.search.split("=")[1] : "/dashboard";
-
   const dispatch = useDispatch();
-  const navigate = useNavigate(); // TODO: Switch to redirect method instead of useNavigate()?
+  const navigate = useNavigate();
   const { error, loading, userInfo } = useSelector((state) => state.userLogin) || {};
+  const { pathname } = location.state?.from || "/dashboard";
 
   useEffect(() => {
     console.log("Redirect useEffect called");
+    console.log("location.state.from: " + location.state?.from);
+    console.log("pathname: " + pathname);
     if (userInfo) {
-      console.log("Redirect to route: " + redirect);
       console.log("Redirect useEffect userInfo: " + userInfo);
-      navigate(redirect);
+      navigate(pathname);
     }
-  }, [navigate, userInfo, redirect]);
+  }, [navigate, pathname, location.state?.from, userInfo]);
 
   const handleSubmit = (event) => {
     event.preventDefault();
