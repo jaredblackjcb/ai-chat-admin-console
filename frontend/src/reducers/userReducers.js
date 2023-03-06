@@ -16,7 +16,7 @@ export const userSlice = createSlice({
       return { loading: false, error: action.payload };
     },
     userLogout(state) {
-      return [];
+      return {};
     },
   },
 });
