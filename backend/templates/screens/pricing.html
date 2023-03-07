@@ -1,0 +1,244 @@
+{% extends 'web/base.html' %}
+{% load static %}
+{% block body %}
+<section class="pricing py-5">
+  <div class="container text-center mx-auto">
+    <h1>Simple, clear pricing</h1>
+    <h4>Get started with the best plan for you.</h4>
+  </div>
+</section>
+
+<!-- Monthly/Annual Pricing Toggle -->
+{% if active_plan_intervals|length > 1 %}
+  <div class="text-center">
+    <div class="btn-group">
+      {% for interval in active_plan_intervals %}
+        <button class="btn btn-outline-primary" id="plan-selector-{{interval.interval}}">{{ interval.name }}</button>
+      {% endfor %}
+    </div>
+    <div class="my-2" id="plan-help" ></div>
+  </div>
+{% endif %}
+  
+  <section class="pricing py-5">
+    <div class="container">
+      <div class="row">
+        <!-- Free Tier -->
+        <div class="col-lg-4">
+          <div class="card h-100 mb-5 mb-lg-0">
+            <div class="card-body">
+              <h5 class="card-title text-muted text-uppercase text-center">Free</h5>
+              <h6 class="card-price text-center">$0<span class="period">/month</span></h6>
+              <hr />
+              <ul class="fa-ul">
+                <li>
+                  <span class="fa-li"><i class="fas fa-check"></i></span>Single User
+                </li>
+                <li>
+                  <span class="fa-li"><i class="fas fa-check"></i></span>5GB Storage
+                </li>
+                <li>
+                  <span class="fa-li"><i class="fas fa-check"></i></span>Unlimited Public Projects
+                </li>
+                <li>
+                  <span class="fa-li"><i class="fas fa-check"></i></span>Community Access
+                </li>
+                <li class="text-muted">
+                  <span class="fa-li"><i class="fas fa-times"></i></span>Unlimited Private Projects
+                </li>
+                <li class="text-muted">
+                  <span class="fa-li"><i class="fas fa-times"></i></span>Dedicated Phone Support
+                </li>
+                <li class="text-muted">
+                  <span class="fa-li"><i class="fas fa-times"></i></span>Free Subdomain
+                </li>
+                <li class="text-muted">
+                  <span class="fa-li"><i class="fas fa-times"></i></span>Monthly Status Reports
+                </li>
+              </ul>
+              <div class="d-grid">
+                <a href="{% url 'account_signup' %}" class="btn btn-primary text-uppercase">GET STARTED</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% for product in active_products %}
+        <div class="plan col-lg-4" data-product-id="{{ product.stripe_id }}" data-plan-id="{{ product.default_price.id }}">
+          <div class="card h-100 mb-5 mb-lg-0">
+            <div class="card-body d-flex flex-column ">
+              <h5 class="card-title text-muted text-uppercase text-center">{{ product.metadata.name }}</h5>
+              <h6 class="card-price text-center"><span id="price" class="price"></span><span class="period interval"></span></h6>
+              <hr />
+              <ul class="fa-ul">
+                {% for feature in product.metadata.features %}
+                <li>
+                  <span class="fa-li"><i class="fas fa-check"></i></span><strong>{{ feature }}</strong>
+                </li>
+                {% endfor %}
+              </ul>
+              <div class="mt-auto">
+                  <div class="d-grid">
+                    <a id="plan-selector-btn" href="{% url 'account_signup' price_id=product.annual_price.id %}" class="btn btn-primary text-uppercase">GET STARTED</a>
+                  </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    </section>
+    <!-- Plan Comparison Section -->
+    <section class="pricing py-5">
+      <div class="container">
+            <h2 class="display-6 text-center mb-4">Compare plans</h2>
+    <div class="row justify-content-center">
+      <div class="col-lg-8 col-md-10 col-sm-12">
+              <table class="table table-striped text-center">
+        <thead>
+          <tr>
+            <th style="width: 34%;"></th>
+            <th style="width: 22%;">Free</th>
+            <th style="width: 22%;">Pro</th>
+            <th style="width: 22%;">Enterprise</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row bg-light" class="text-start">Public</th>
+            <td>
+                <i class="fa fa-check"></i>
+            </td>
+            <td>
+                <i class="fa fa-check"></i>
+            </td>
+            <td>
+                <i class="fa fa-check"></i>
+            </td>
+          </tr>
+          <tr>
+            <th scope="row" class="text-start">Private</th>
+            <td></td>
+            <td>
+                <i class="fa fa-check"></i>
+            </td>
+            <td>
+                <i class="fa fa-check"></i>
+            </td>
+          </tr>
+        </tbody>
+
+        <tbody>
+          <tr>
+            <th scope="row" class="text-start">Permissions</th>
+            <td>
+              <i class="fa fa-check"></i>
+            </td>
+            <td>
+                <i class="fa fa-check"></i>
+            </td>
+            <td>
+                <i class="fa fa-check"></i>
+            </td>
+          </tr>
+          <tr>
+            <th scope="row" class="text-start">Sharing</th>
+            <td></td>
+            <td>
+                <i class="fa fa-check"></i>
+            </td>
+            <td>
+                <i class="fa fa-check"></i>
+            </td>
+          </tr>
+          <tr>
+            <th scope="row" class="text-start">Unlimited members</th>
+            <td></td>
+            <td>
+                <i class="fa fa-check"></i>
+            </td>
+            <td>
+                <i class="fa fa-check"></i>
+            </td>
+          </tr>
+          <tr>
+            <th scope="row" class="text-start">Extra security</th>
+            <td></td>
+            <td></td>
+            <td>
+                <i class="fa fa-check"></i>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+      </div>
+    </section>
+{% endblock %}
+{% block page_js %}
+{{ active_products_json|json_script:'active-products' }}
+<script>
+    const activeProducts = JSON.parse(document.getElementById('active-products').textContent);
+    const defaultAnnual = '{{ default_to_annual }}' === 'True';
+
+    // hook up "monthly"/"annual" selection events
+    const monthlySelector = document.getElementById('plan-selector-month');
+    const annualSelector = document.getElementById('plan-selector-year');
+    const helpLabel = document.getElementById('plan-help');
+    const planElements = document.getElementsByClassName('plan');
+    const annualHelpText = "You're getting two months free by choosing an Annual plan!";
+    const monthlyHelpText = "Upgrade to annual pricing to get two free months.";
+
+    const updatePlans = function (isAnnual) {
+      for (let i = 0; i < planElements.length; i++) {
+        let planElt = planElements[i];
+        let productId = planElt.dataset.productId;
+        let planMetadata = (
+          isAnnual ? activeProducts[productId]['annual_price'] : activeProducts[productId]['monthly_price']
+        );
+        // set data attributes of pricing plan elements
+        planElt.dataset.planId = planMetadata.stripe_id;
+        planElt.dataset.interval = isAnnual ? 'year' : 'month';
+        planElt.dataset.paymentAmount = planMetadata.payment_amount;
+        let priceElt = planElt.querySelector('.price');
+        priceElt.textContent = planMetadata.payment_amount;
+        let intervalElt = planElt.querySelector('.interval');
+        intervalElt.textContent = '/ ' + planMetadata.interval;
+        // set href of the button on each pricing plan to pass in the correct
+        // stripe price_idurl param to the signup page
+        let planSelectorBtn = planElt.querySelector('#plan-selector-btn');
+        planSelectorBtn.setAttribute('href', '../../accounts/signup/' + planMetadata.stripe_id + '/');
+      }
+    };
+
+    const selectPeriod = function (isAnnual) {
+      if (isAnnual) {
+        if (annualSelector) {
+          annualSelector.classList.add('is-selected', 'is-primary', 'btn-active');
+          monthlySelector.classList.remove('is-selected', 'is-primary', 'btn-active');
+          helpLabel.innerText = annualHelpText;
+        }
+        updatePlans(isAnnual);
+      } else {
+        if (monthlySelector) {
+          annualSelector.classList.remove('is-selected', 'is-primary', 'btn-active');
+          monthlySelector.classList.add('is-selected', 'is-primary', 'btn-active');
+          helpLabel.innerText = monthlyHelpText;
+        }
+        updatePlans(isAnnual);
+      }
+    };
+    selectPeriod(defaultAnnual);
+    if (annualSelector) {
+      annualSelector.addEventListener('click', function (event) {
+        selectPeriod(true);
+      });
+    }
+    if (monthlySelector) {
+      monthlySelector.addEventListener('click', function (event) {
+        selectPeriod(false);
+      });
+    }
+</script>
+{% endblock page_js %}
