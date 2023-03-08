@@ -1,31 +1,26 @@
 import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { Container, Button, Row, Col, Form, FormControl } from "react-bootstrap";
 
-export default function Signup() {
-  const [state, setState] = useState({
-    email: "",
-    password: "",
-  });
+import { register } from "../actions/userActions";
 
-  const handleChange = (event) => {
-    setState({
-      ...state,
-      [event.target.name]: event.target.value,
-    });
-  };
+export default function Signup() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const { loading, error } = useSelector((state) => state.userLogin) || {};
+  const dispatch = useDispatch();
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    const userData = {
-      email: state.email,
-      password: state.password,
-    };
-    console.log("Sign up " + userData.email + " " + userData.password);
+    dispatch(register(email, password));
   };
 
   return (
     <Container>
+      {/* TODO: Add custom error and loader components */}
+      {error && <h1>{error}</h1>}
+      {loading && <h1>Loading...</h1>}
       <Row>
         <Col md="4">
           <h1>Sign up</h1>
@@ -36,8 +31,8 @@ export default function Signup() {
                 type="email"
                 name="email"
                 placeholder="Email address"
-                value={state.email}
-                onChange={handleChange}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
               />
               <FormControl.Feedback type="invalid"></FormControl.Feedback>
             </Form.Group>
@@ -48,8 +43,8 @@ export default function Signup() {
                 type="password"
                 name="password"
                 placeholder="Enter password"
-                value={state.password}
-                onChange={handleChange}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
               />
               <Form.Control.Feedback type="invalid"></Form.Control.Feedback>
             </Form.Group>

@@ -20,6 +20,7 @@ def registerUser(request):
     data = request.data
     
     try:
+        #Create a user in the database, setting username and email to 'email' and encrypting password
         user = CustomUser.objects.create(
             username=data['email'],
             email=data['email'],

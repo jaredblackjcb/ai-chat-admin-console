@@ -6,6 +6,15 @@ export const userSlice = createSlice({
   name: "user",
   initialState: { userInfo: userInfoFromStorage },
   reducers: {
+    userRegisterRequest(state) {
+      return { loading: true };
+    },
+    userRegisterSuccess(state, action) {
+      return { loading: false, userInfo: action.payload };
+    },
+    userRegisterFail(state, action) {
+      return { loading: false, error: action.payload };
+    },
     userLoginRequest(state) {
       return { loading: true };
     },
