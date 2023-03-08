@@ -18,7 +18,14 @@ export default function App() {
       <BrowserRouter>
         <Routes>
           <Route path="home" element={<Home />} />
-          <Route path="signup" element={<Signup />} />
+          <Route
+            path="signup"
+            element={
+              <RestrictForAuth>
+                <Signup />
+              </RestrictForAuth>
+            }
+          />
           <Route
             path="login"
             element={

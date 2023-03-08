@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import { Container, Button, Row, Col, Form, FormControl } from "react-bootstrap";
 import { login } from "../actions/userActions";
 import { useDispatch, useSelector } from "react-redux";
@@ -7,21 +7,8 @@ import { useDispatch, useSelector } from "react-redux";
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const location = useLocation();
   const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const { error, loading, userInfo } = useSelector((state) => state.userLogin) || {};
-  const { pathname } = location.state?.from || "/dashboard";
-
-  useEffect(() => {
-    console.log("Redirect useEffect called");
-    console.log("location.state.from: " + location.state?.from);
-    console.log("pathname: " + pathname);
-    if (userInfo) {
-      console.log("Redirect useEffect userInfo: " + userInfo);
-      navigate(pathname);
-    }
-  }, [navigate, pathname, location.state?.from, userInfo]);
+  const { error, loading } = useSelector((state) => state.userLogin) || {};
 
   const handleSubmit = (event) => {
     event.preventDefault();
