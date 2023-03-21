@@ -1,5 +1,5 @@
 import React from "react";
-import { Routes, Navigate, Outlet, useLocation, Route, BrowserRouter } from "react-router-dom";
+import { Routes, Navigate, Outlet, useLocation, Route, HashRouter } from "react-router-dom";
 import { Provider } from "react-redux";
 import Home from "./screens/Home";
 import Signup from "./screens/Signup";
@@ -15,7 +15,7 @@ import { useSelector } from "react-redux";
 export default function App() {
   return (
     <Provider store={store}>
-      <BrowserRouter>
+      <HashRouter>
         <Routes>
           <Route path="home" element={<Home />} />
           <Route
@@ -70,7 +70,7 @@ export default function App() {
             />
           </Route>
         </Routes>
-      </BrowserRouter>
+      </HashRouter>
     </Provider>
   );
 }
@@ -94,7 +94,7 @@ const RestrictForAuth = ({ children }) => {
   console.log("location.state", location.state);
   let { pathname } = location.state?.from || { pathname: "/dashboard" };
   console.log("pathname: " + pathname);
-  if (pathname.includes("login")) {
+  if (pathname.includes("login") || pathname.includes("register")) {
     pathname = "/dashboard";
     console.log("pathname: " + pathname);
   }

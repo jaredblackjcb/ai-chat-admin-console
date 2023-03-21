@@ -5,4 +5,5 @@ from . import views
 urlpatterns = [
     path('routes/', views.getRoutes, name='routes'),
     path('landing/', TemplateView.as_view(template_name="screens/landing.html"), name='landing'),
+    path('', TemplateView.as_view(template_name='screens/react.html'), name='react_app'),
 ]
