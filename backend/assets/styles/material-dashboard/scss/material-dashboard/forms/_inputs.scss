@@ -1,6 +1,8 @@
 .form-control {
   border: none;
-
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  
   &.is-invalid {
     border: $input-border-width solid $input-border-color;
     padding: $form-control-outline-padding;

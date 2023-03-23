@@ -23,7 +23,7 @@ export default function Signup() {
       {error && <h1>{error}</h1>}
       {loading && <h1>Loading...</h1>}
       <Row>
-        <Col xs={0} md={6} className="p-0">
+        <Col md={6} className="p-0 d-lg-flex d-none h-100 my-auto position-absolute top-0 start-0 text-center">
           <Container
             className="position-relative bg-gradient-primary h-100 m-3 px-7 border-radius-lg d-flex flex-column justify-content-center"
             style={{
@@ -32,17 +32,18 @@ export default function Signup() {
             }}
           ></Container>
         </Col>
-        <Col xs={12} md={7} lg={5} xl={4} className="d-flex align-items-center justify-content-center">
-          <Card className="card-plain mt-6">
-            <Card.Header>
+        <Col sm={7} md={5} lg={5} className="d-flex flex-column ms-auto me-auto ms-lg-auto me-lg-5">
+          <Card className="card-plain mt-md-9 mt-6">
+            <Container className="px-4">
               <h4 className="font-weight-bolder">Sign up</h4>
               <p className="mb-0">Enter your email and password to register</p>
-            </Card.Header>
+            </Container>
             <Card.Body>
               <Form onSubmit={handleSubmit}>
                 <Form.Group className="mb-3 input-group-static" controlId="formBasicEmail">
                   <Form.Label>Email</Form.Label>
                   <Form.Control
+                    className="jb-form-control"
                     type="email"
                     name="email"
                     placeholder="Email address"
@@ -55,6 +56,7 @@ export default function Signup() {
                 <Form.Group className="mb-3 input-group-static" controlId="formBasicPassword">
                   <Form.Label>Password</Form.Label>
                   <Form.Control
+                    className="jb-form-control"
                     type="password"
                     name="password"
                     placeholder="Enter password"
