@@ -81,8 +81,11 @@ ROOT_URLCONF = 'backend.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        # For hosting React app using Django, app will have two template directories
+        # templates - landing and pricing pages
+        # frontent/build - react app will generate index.html
         'DIRS': [ BASE_DIR / 'templates',
-                 BASE_DIR / 'frontend/build'],
+                 BASE_DIR / 'frontend/build'], 
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
