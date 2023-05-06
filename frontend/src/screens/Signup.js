@@ -40,10 +40,10 @@ export default function Signup() {
             </Container>
             <Card.Body>
               <Form onSubmit={handleSubmit}>
-                <Form.Group className="mb-3 input-group-static" controlId="formBasicEmail">
+                <Form.Group className="mb-3 input-group-dynamic" controlId="formBasicEmail">
                   <Form.Label>Email</Form.Label>
                   <Form.Control
-                    className="jb-form-control"
+                    className="form-control"
                     type="email"
                     name="email"
                     placeholder="Email address"
@@ -56,7 +56,7 @@ export default function Signup() {
                 <Form.Group className="mb-3 input-group-static" controlId="formBasicPassword">
                   <Form.Label>Password</Form.Label>
                   <Form.Control
-                    className="jb-form-control"
+                    className="form-control"
                     type="password"
                     name="password"
                     placeholder="Enter password"

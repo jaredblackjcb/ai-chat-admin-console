@@ -11,6 +11,7 @@ import Profile from "./screens/Profile";
 import Header from "./components/Header";
 import { store } from "./store/index";
 import { useSelector } from "react-redux";
+import "./styles/site-bootstrap.scss";
 
 export default function App() {
   return (
