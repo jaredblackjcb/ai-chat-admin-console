@@ -5,7 +5,8 @@ from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework import status
-
+from google.oauth2 import id_token
+from google.auth.transport import requests
 from .serializers import CustomTokenObtainPairSerializer, UserSerializer, UserSerializerWithToken
 from .models import CustomUser
 
@@ -46,3 +47,38 @@ def getAllUsers(request):
     users = CustomUser.objects.all()
     serializer = UserSerializer(users, many=True)
     return Response(serializer.data)
+
+@api_view(['POST'])
+def googleAuth(request):
+    token = request.data.get('token')
+
+    try:
+        # Verify the Google ID token
+        id_info = id_token.verify_oauth2_token(token, requests.Request())
+
+        if id_info['iss'] not in ['accounts.google.com', 'https://accounts.google.com']:
+            raise ValueError('Invalid token')
+
+        # Get email from the Google ID token
+        email = id_info['email']
+
+        try:
+            # Fetch user data from the DB
+            user = CustomUser.objects.get(username=email)
+        except CustomUser.DoesNotExist:
+            # Pass None to generate a random password (required by Django)
+            random_password = make_password(None)  
+            # Create a new user using the data from the Google ID token
+            user, created = CustomUser.objects.get_or_create(username=email, 
+                                                         email=email,
+                                                         password=random_password,
+                                                         first_name=id_info['given_name'],
+                                                         last_name=id_info['family_name'])
+
+        # Generate token or perform any additional logic for Google Sign-In
+        serializer = UserSerializerWithToken(user)
+
+        # Return the response
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    except ValueError:
+        return Response({'detail': 'Invalid token'}, status=status.HTTP_400_BAD_REQUEST)

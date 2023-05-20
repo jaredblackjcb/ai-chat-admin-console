@@ -1,6 +1,7 @@
 import React from "react";
 import { Routes, Navigate, Outlet, useLocation, Route, HashRouter } from "react-router-dom";
 import { Provider } from "react-redux";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 import Home from "./screens/Home";
 import Signup from "./screens/Signup";
 import Login from "./screens/Login";
@@ -16,62 +17,64 @@ import "./styles/site-bootstrap.scss";
 export default function App() {
   return (
     <Provider store={store}>
-      <HashRouter>
-        <Routes>
-          <Route path="home" element={<Home />} />
-          <Route
-            path="signup"
-            element={
-              <RestrictForAuth>
-                <Signup />
-              </RestrictForAuth>
-            }
-          />
-          <Route
-            path="login"
-            element={
-              <RestrictForAuth>
-                <Login />
-              </RestrictForAuth>
-            }
-          />
-          <Route path="" element={<h1>Under Construction</h1>} />
-          <Route element={<RootLayout />}>
+      <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}>
+        <HashRouter>
+          <Routes>
+            <Route path="home" element={<Home />} />
             <Route
-              path="dashboard"
+              path="signup"
               element={
-                <RequireAuth>
-                  <Dashboard />
-                </RequireAuth>
-              }
-            ></Route>
-            <Route
-              path="profile"
-              element={
-                <RequireAuth>
-                  <Profile />
-                </RequireAuth>
+                <RestrictForAuth>
+                  <Signup />
+                </RestrictForAuth>
               }
             />
             <Route
-              path="subscription"
+              path="login"
               element={
-                <RequireAuth>
-                  <ManageSubscription />
-                </RequireAuth>
+                <RestrictForAuth>
+                  <Login />
+                </RestrictForAuth>
               }
             />
-            <Route
-              path="security/password"
-              element={
-                <RequireAuth>
-                  <ChangePassword />
-                </RequireAuth>
-              }
-            />
-          </Route>
-        </Routes>
-      </HashRouter>
+            <Route path="" element={<h1>Under Construction</h1>} />
+            <Route element={<RootLayout />}>
+              <Route
+                path="dashboard"
+                element={
+                  <RequireAuth>
+                    <Dashboard />
+                  </RequireAuth>
+                }
+              ></Route>
+              <Route
+                path="profile"
+                element={
+                  <RequireAuth>
+                    <Profile />
+                  </RequireAuth>
+                }
+              />
+              <Route
+                path="subscription"
+                element={
+                  <RequireAuth>
+                    <ManageSubscription />
+                  </RequireAuth>
+                }
+              />
+              <Route
+                path="security/password"
+                element={
+                  <RequireAuth>
+                    <ChangePassword />
+                  </RequireAuth>
+                }
+              />
+            </Route>
+          </Routes>
+        </HashRouter>
+      </GoogleOAuthProvider>
     </Provider>
   );
 }

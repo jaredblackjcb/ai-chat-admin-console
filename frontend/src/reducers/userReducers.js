@@ -24,6 +24,15 @@ export const userSlice = createSlice({
     userLoginFail(state, action) {
       return { loading: false, error: action.payload };
     },
+    googleAuthRequest(state) {
+      return { ...state, loading: true };
+    },
+    googleAuthSuccess(state, action) {
+      return { ...state, loading: false, userInfo: action.payload };
+    },
+    googleAuthFail(state, action) {
+      return { ...state, loading: false, error: action.payload };
+    },
     userLogout(state) {
       return {};
     },

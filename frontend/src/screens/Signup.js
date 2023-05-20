@@ -3,8 +3,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { Container, Button, Row, Col, Form, FormControl, Card } from "react-bootstrap";
 import { FcGoogle } from "react-icons/fc";
+import { GoogleLogin } from "@react-oauth/google";
 
-import { register } from "../actions/userActions";
+import { register, googleAuth } from "../actions/userActions";
 
 export default function Signup() {
   const [email, setEmail] = useState("");
@@ -17,9 +18,20 @@ export default function Signup() {
     dispatch(register(email, password));
   };
 
+  const handleGoogleAuthSuccess = (response) => {
+    // Destructure the credential from the Google Sign-In response here
+    const { credential } = response;
+    // Call Google Auth action here, passing the  client token credential
+    dispatch(googleAuth(credential));
+  };
+
+  const handleGoogleAuthFailure = (error) => {
+    console.log("Google Sign-In failed:", error);
+  };
+
   return (
     <Container fluid>
-      {/* TODO: Add custom error and loader components */}
+      ;{/* TODO: Add custom error and loader components */}
       {error && <h1>{error}</h1>}
       {loading && <h1>Loading...</h1>}
       <Row>
@@ -83,7 +95,7 @@ export default function Signup() {
                 <Button className="btn btn-primary w-100" type="submit" color="primary" onClick={handleSubmit}>
                   Sign up
                 </Button>
-                <a className="btn btn-outline-secondary w-100" href="/accounts/google/login/">
+                <Button className="btn btn-outline-secondary w-100" type="button" onClick={handleSubmit}>
                   <div className="d-flex align-items-center justify-content-center">
                     <span className="pg-icon">
                       <FcGoogle size={"2em"} />
@@ -91,7 +103,13 @@ export default function Signup() {
                     <p> </p>
                     Continue with Google
                   </div>
-                </a>
+                </Button>
+                <GoogleLogin
+                  onSuccess={(credentialResponse) => {
+                    handleGoogleAuthSuccess(credentialResponse);
+                  }}
+                  onError={handleGoogleAuthFailure(error)}
+                />
               </Form>
             </Card.Body>
             <hr />

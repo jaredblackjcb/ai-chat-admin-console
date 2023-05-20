@@ -7,8 +7,34 @@ import {
   USER_REGISTER_REQUEST,
   USER_REGISTER_SUCCESS,
   USER_REGISTER_FAIL,
+  GOOGLE_AUTH_REQUEST,
+  GOOGLE_AUTH_SUCCESS,
+  GOOGLE_AUTH_FAIL,
   USER_HEADER_CONFIG,
 } from "../constants/userConstants";
+
+export const googleAuth = (token) => async (dispatch) => {
+  try {
+    dispatch({
+      type: GOOGLE_AUTH_REQUEST,
+    });
+
+    const { data } = await axios.post("/api/users/google-auth/", { token });
+
+    dispatch({
+      type: GOOGLE_AUTH_SUCCESS,
+      payload: data,
+    });
+
+    // Save the userInfo JSON to local storage so it can be used to set initial state on page refresh
+    localStorage.setItem("userInfo", JSON.stringify(data));
+  } catch (error) {
+    dispatch({
+      type: GOOGLE_AUTH_FAIL,
+      payload: error.response && error.response.data.detail ? error.response.data.detail : error.message,
+    });
+  }
+};
 
 export const register = (email, password) => async (dispatch) => {
   try {
