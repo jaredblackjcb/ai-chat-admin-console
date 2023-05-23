@@ -68,3 +68,15 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+
+# Frontend Required Environment Variables
+Add variables to .env file in root frontend directory.
+Make sure variables are preceded by 'REACT_APP_' and have no spaces around the = sign.
+Access variables anywhere in the JS by using 'process.env.REACT_APP_VARIABLE_NAME'.
+
+Required variables and where to find them:
+<ul>
+REACT_APP_GOOGLE_CLIENT_ID - https://console.cloud.google.com/apis/credentials?project=sourdough-saas
+
+</ul>

@@ -1,0 +1,2 @@
+WELCOME_EMAIL_SUBJECT =  "Welcome to Sourdough SaaS!"
+WELCOME_EMAIL_BODY = "Hi there, Welcome to Sourdough SaaS! To complete your sign up, click the following link. http://localhost:8000/users/verify Thanks, The Sourdough Team"

@@ -9,8 +9,11 @@ from google.oauth2 import id_token
 from google.auth.transport import requests
 from .serializers import CustomTokenObtainPairSerializer, UserSerializer, UserSerializerWithToken
 from .models import CustomUser
+import logging
+from emails.send_emails import send_welcome_email
 
 # Create your views here.
+logger = logging.getLogger(__name__)
 
 #Login view
 class CustomTokenObtainPairView(TokenObtainPairView):
@@ -28,6 +31,11 @@ def registerUser(request):
             password=make_password(data['password'])
         )
         serializer = UserSerializerWithToken(user, many=False)
+        logger.info("User registered with email %s" % data['email'])
+        try:
+            send_welcome_email(data['email'], data['first_name'])
+        except:
+            logger.error("Welcome email could not be sent for user %s" % data['email'])
     except:
         message = {'detail': 'User with this email address already exists'}
         return Response(message, status=status.HTTP_400_BAD_REQUEST)
