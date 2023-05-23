@@ -10,17 +10,25 @@ import ChangePassword from "./screens/ChangePassword";
 import ManageSubscription from "./screens/ManageSubscription";
 import Profile from "./screens/Profile";
 import Header from "./components/Header";
+import Pricing from "./screens/Pricing";
 import { store } from "./store/index";
 import { useSelector } from "react-redux";
 import "./styles/site-bootstrap.scss";
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { faCheck } from "@fortawesome/free-solid-svg-icons";
 
 export default function App() {
+  // Add Font Awesome icons to global library
+  library.add(faCheck);
+
   return (
+    // Wrap the app with the Redux store provider
     <Provider store={store}>
       <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}>
         <HashRouter>
           <Routes>
             <Route path="home" element={<Home />} />
+            <Route path="pricing" element={<Pricing />} />
             <Route
               path="signup"
               element={
