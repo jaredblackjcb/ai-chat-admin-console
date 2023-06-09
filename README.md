@@ -1,4 +1,4 @@
-# react-django-saas
+# Sourdough SaaS
 SaaS app boilerplate built with a react frontend and django backend
 
 # Getting Started
