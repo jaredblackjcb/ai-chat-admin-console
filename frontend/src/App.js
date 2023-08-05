@@ -1,5 +1,5 @@
 import React from "react";
-import { Routes, Navigate, Outlet, useLocation, Route, HashRouter } from "react-router-dom";
+import { Routes, Navigate, Outlet, useLocation, Route, HashRouter, BrowserRouter } from "react-router-dom";
 import { Provider } from "react-redux";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import Home from "./screens/Home";
@@ -31,7 +31,7 @@ export default function App() {
     <Elements stripe={stripePromise}>
       <Provider store={store}>
         <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}>
-          <HashRouter>
+          <BrowserRouter>
             <Routes>
               <Route path="home" element={<Home />} />
               <Route path="pricing" element={<Pricing />} />
@@ -87,7 +87,7 @@ export default function App() {
                 />
               </Route>
             </Routes>
-          </HashRouter>
+          </BrowserRouter>
         </GoogleOAuthProvider>
       </Provider>
     </Elements>
