@@ -1,10 +1,12 @@
 import React from "react";
-import { Container, Row, Col, ButtonGroup, ToggleButton, ToggleButtonGroup, Table } from "react-bootstrap";
+import { Container, Row, Col, ToggleButton, ToggleButtonGroup, Table } from "react-bootstrap";
 import PricingCard from "../components/PricingCard";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import CheckoutForm from "../components/CheckoutForm";
+
 
 export default function Pricing() {
-  // Fetch plans from stripe API and create pricing cards to be populated using the data
+
   return (
     <Container className="py-5 text-center mx-auto">
       <h1>Simple, clear pricing</h1>
@@ -71,6 +73,8 @@ export default function Pricing() {
           </Table>
         </Col>
       </Row>
+
+        <CheckoutForm />
     </Container>
   );
 }

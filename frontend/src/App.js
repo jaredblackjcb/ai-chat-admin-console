@@ -16,74 +16,81 @@ import { useSelector } from "react-redux";
 import "./styles/site-bootstrap.scss";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
+import { loadStripe } from "@stripe/stripe-js/pure";
+import { Elements } from "@stripe/react-stripe-js";
 
 export default function App() {
   // Add Font Awesome icons to global library
   library.add(faCheck);
 
+  // Fetch plans from stripe API and create pricing cards to be populated using the data
+  const stripePromise = loadStripe(process.env.STRIPE_TEST_PUBLIC_KEY);
+
   return (
     // Wrap the app with the Redux store provider
-    <Provider store={store}>
-      <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}>
-        <HashRouter>
-          <Routes>
-            <Route path="home" element={<Home />} />
-            <Route path="pricing" element={<Pricing />} />
-            <Route
-              path="signup"
-              element={
-                <RestrictForAuth>
-                  <Signup />
-                </RestrictForAuth>
-              }
-            />
-            <Route
-              path="login"
-              element={
-                <RestrictForAuth>
-                  <Login />
-                </RestrictForAuth>
-              }
-            />
-            <Route path="" element={<h1>Under Construction</h1>} />
-            <Route element={<RootLayout />}>
+    <Elements stripe={stripePromise}>
+      <Provider store={store}>
+        <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}>
+          <HashRouter>
+            <Routes>
+              <Route path="home" element={<Home />} />
+              <Route path="pricing" element={<Pricing />} />
               <Route
-                path="dashboard"
+                path="signup"
                 element={
-                  <RequireAuth>
-                    <Dashboard />
-                  </RequireAuth>
-                }
-              ></Route>
-              <Route
-                path="profile"
-                element={
-                  <RequireAuth>
-                    <Profile />
-                  </RequireAuth>
+                  <RestrictForAuth>
+                    <Signup />
+                  </RestrictForAuth>
                 }
               />
               <Route
-                path="subscription"
+                path="login"
                 element={
-                  <RequireAuth>
-                    <ManageSubscription />
-                  </RequireAuth>
+                  <RestrictForAuth>
+                    <Login />
+                  </RestrictForAuth>
                 }
               />
-              <Route
-                path="security/password"
-                element={
-                  <RequireAuth>
-                    <ChangePassword />
-                  </RequireAuth>
-                }
-              />
-            </Route>
-          </Routes>
-        </HashRouter>
-      </GoogleOAuthProvider>
-    </Provider>
+              <Route path="" element={<h1>Under Construction</h1>} />
+              <Route element={<RootLayout />}>
+                <Route
+                  path="dashboard"
+                  element={
+                    <RequireAuth>
+                      <Dashboard />
+                    </RequireAuth>
+                  }
+                ></Route>
+                <Route
+                  path="profile"
+                  element={
+                    <RequireAuth>
+                      <Profile />
+                    </RequireAuth>
+                  }
+                />
+                <Route
+                  path="subscription"
+                  element={
+                    <RequireAuth>
+                      <ManageSubscription />
+                    </RequireAuth>
+                  }
+                />
+                <Route
+                  path="security/password"
+                  element={
+                    <RequireAuth>
+                      <ChangePassword />
+                    </RequireAuth>
+                  }
+                />
+              </Route>
+            </Routes>
+          </HashRouter>
+        </GoogleOAuthProvider>
+      </Provider>
+    </Elements>
   );
 }
 
