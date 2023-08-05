@@ -132,7 +132,7 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': env('DJANGO_DATABASE_NAME', default='react-django-saas'),
+        'NAME': env('DJANGO_DATABASE_NAME', default='ai-admin-console'),
         'USER': env('DJANGO_DATABASE_USER', default='postgres'),
         'PASSWORD': env('DJANGO_DATABASE_PASSWORD', default='***'),
         'HOST': env('DJANGO_DATABASE_HOST', default='localhost'),
