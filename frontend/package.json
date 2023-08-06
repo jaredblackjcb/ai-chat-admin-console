@@ -22,6 +22,8 @@
     "axios": "^1.4.0",
     "bootstrap": "^5.2.3",
     "eslint-plugin-react-hooks": "^4.6.0",
+    "langchain": "^0.0.123",
+    "pdf-parse": "^1.1.1",
     "react": "^18.2.0",
     "react-bootstrap": "^2.7.2",
     "react-dom": "^18.2.0",
@@ -31,7 +33,8 @@
     "react-scripts": "5.0.1",
     "sass": "^1.59.3",
     "watch": "^1.0.2",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "webpack-node-externals": "^3.0.0"
   },
   "scripts": {
     "start": "react-scripts start",

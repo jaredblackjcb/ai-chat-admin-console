@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const userInfoFromStorage = localStorage.getItem("userInfo") ? JSON.parse(localStorage.getItem("userInfo")) : null;
 
+// createSlice uses Immer under the hood to maintain the immutability of the state so you don't have to spread the ...state
 export const userSlice = createSlice({
   name: "user",
   initialState: { userInfo: userInfoFromStorage },
@@ -25,13 +26,13 @@ export const userSlice = createSlice({
       return { loading: false, error: action.payload };
     },
     googleAuthRequest(state) {
-      return { ...state, loading: true };
+      return { loading: true };
     },
     googleAuthSuccess(state, action) {
-      return { ...state, loading: false, userInfo: action.payload };
+      return { loading: false, userInfo: action.payload };
     },
     googleAuthFail(state, action) {
-      return { ...state, loading: false, error: action.payload };
+      return { loading: false, error: action.payload };
     },
     userLogout(state) {
       return {};

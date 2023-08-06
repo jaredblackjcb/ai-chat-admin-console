@@ -1,4 +1,6 @@
 import * as React from "react";
+import { useDispatch, useSelector } from "react-redux";
+
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
@@ -15,6 +17,8 @@ import Avatar from "@mui/material/Avatar";
 import IconButton from "@mui/material/IconButton";
 import FolderIcon from "@mui/icons-material/Folder";
 import DeleteIcon from "@mui/icons-material/Delete";
+
+import { encodeFiles } from "../actions/aiActions";
 
 const style = {
   position: "absolute",
@@ -34,29 +38,41 @@ export default function ConfigureDataSourcesModal() {
   const [dense, setDense] = React.useState(true);
   const [secondary, setSecondary] = React.useState(false);
   const [fileNames, setFileNames] = React.useState([]);
+  const [files, setFiles] = React.useState([]);
+  const { loading, error } = useSelector((state) => state.aiInfo || {});
+
+  const dispatch = useDispatch();
+
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
 
   const handleNamespaceChange = (event) => {
     setNamespace(event.target.value);
   };
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
   const handleFileChange = (event) => {
-    // Get a list of file names
-    const files = event.target.files;
-    const names = Array.from(files).map((file) => file.name);
-    // Calculate embedding cost and display it on the UI
+    // Get a list of files and file names
+    const uploadedFiles = event.target.files;
+    const names = Array.from(uploadedFiles).map((file) => file.name);
 
-    // save files to a temp directory for embedding on save
-
+    setFiles([...files, ...uploadedFiles]);
     setFileNames([...fileNames, ...names]);
   };
   function handleDeleteFile(index) {
     const updatedFileNames = fileNames.filter((_, i) => i !== index);
     setFileNames(updatedFileNames);
+
+    const updatedFiles = files.filter((_, i) => i !== index);
+    setFiles(updatedFiles);
   }
   const handleSave = (event) => {
-    // Loop through file names and create document vectors for each file
-    // Make API call to backend to upload vectors to pinecone (include userId + namespace and vectors)
+    event.preventDefault();
+    // Add the files to a formData object
+    const formData = new FormData();
+    files.forEach((file, index) => {
+      formData.append(`file${index}`, file);
+    });
+    // Send files to backend to upload vectors to pinecone (include userId + namespace and vectors)
+    dispatch(encodeFiles(formData, namespace));
   };
 
   return (
@@ -126,6 +142,8 @@ export default function ConfigureDataSourcesModal() {
           <Button variant="contained" onClick={handleSave}>
             SAVE
           </Button>
+          {error && <h1>{error}</h1>}
+          {loading && <h1>Loading...</h1>}
         </Box>
       </Modal>
     </div>
