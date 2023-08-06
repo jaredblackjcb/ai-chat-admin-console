@@ -53,7 +53,9 @@ INSTALLED_APPS = [
 
     # Local apps
     'base',
-    'users'
+    'users',
+    'subscriptions',
+    'chat'
 ]
 
 REST_FRAMEWORK = {
@@ -271,3 +273,5 @@ LOGGING = {
         },
     },
 }
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
