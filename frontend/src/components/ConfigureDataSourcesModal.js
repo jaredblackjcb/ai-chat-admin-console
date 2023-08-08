@@ -120,6 +120,7 @@ export default function ConfigureDataSourcesModal() {
           </List>
 
           {/* Namespace selector */}
+          <Button>Add Namespace +</Button>
           <FormControl fullWidth>
             <InputLabel id="demo-simple-select-label">namespace</InputLabel>
             <Select
