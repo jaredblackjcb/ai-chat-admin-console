@@ -3,10 +3,10 @@ from django.conf import settings
 import datetime
 # Create your models here.
 class ChatDataSource(models.Model):
-    user_id = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     file_name = models.CharField(max_length=255)
     namespace = models.CharField(max_length=255)
-    last_update = models.DateTimeField()
+    last_modified = models.DateTimeField()
 
     class Meta:
         # Define the compount primary key
@@ -18,11 +18,11 @@ class ChatDataSource(models.Model):
         return f"{self.user_id}-{self.file_name}-{self.namespace}"
     
     def save(self, *args, **kwargs):
-        self.last_update = datetime.datetime.utcnow()
+        self.last_modified = datetime.datetime.utcnow()
         super().save(*args, **kwargs)
 
 class Namespace(models.Model):
-    user_id = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     namespace = models.CharField(max_length=255)
 
     class Meta:
@@ -32,3 +32,27 @@ class Namespace(models.Model):
 
     def __str__(self):
         return f"{self.user_id}-{self.namespace}"
+    
+class File(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    file_name = models.CharField(max_length=255)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['user_id', 'file_name'], name="unique_user_file_name")
+        ]
+
+    def __str__(self):
+        return f"{self.user_id}-{self.file_name}"
+    
+class FileNamespace(models.Model):
+    file_name = models.ForeignKey(File, on_delete=models.CASCADE)
+    namespace = models.ForeignKey(Namespace, on_delete=models.CASCADE)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['file_name', 'namespace'], name="unique_file_namespace")
+        ]
+
+    def __str__(self):
+        return f"File: {self.file_name.file_name} - Namespace: {self.namespace.namespace}"
