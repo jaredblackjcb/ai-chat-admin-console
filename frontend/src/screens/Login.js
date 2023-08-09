@@ -8,7 +8,7 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();
-  const { error, loading } = useSelector((state) => state.userLogin) || {};
+  const { error, loading } = useSelector((state) => state.user) || {};
 
   const handleSubmit = (event) => {
     event.preventDefault();

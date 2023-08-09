@@ -46,12 +46,12 @@ class File(models.Model):
         return f"{self.user_id}-{self.file_name}"
     
 class FileNamespace(models.Model):
-    file_name = models.ForeignKey(File, on_delete=models.CASCADE)
+    file = models.ForeignKey(File, on_delete=models.CASCADE)
     namespace = models.ForeignKey(Namespace, on_delete=models.CASCADE)
 
     class Meta:
         constraints = [
-            models.UniqueConstraint(fields=['file_name', 'namespace'], name="unique_file_namespace")
+            models.UniqueConstraint(fields=['file', 'namespace'], name="unique_file_namespace")
         ]
 
     def __str__(self):

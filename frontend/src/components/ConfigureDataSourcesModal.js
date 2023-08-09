@@ -40,6 +40,7 @@ export default function ConfigureDataSourcesModal() {
   const [fileNames, setFileNames] = React.useState([]);
   const [files, setFiles] = React.useState([]);
   const { loading, error } = useSelector((state) => state.aiInfo || {});
+  const userId = useSelector((state) => state.user.userInfo.user_id);
 
   const dispatch = useDispatch();
 
@@ -72,11 +73,11 @@ export default function ConfigureDataSourcesModal() {
       formData.append(`file${index}`, file);
     });
     // Send files to backend to upload vectors to pinecone (include userId + namespace and vectors)
-    dispatch(encodeFiles(formData, namespace));
+    dispatch(encodeFiles(formData, namespace, userId));
   };
 
   return (
-    <div>
+    <Box>
       <Button variant="contained" onClick={handleOpen}>
         Configure Data Sources
       </Button>
@@ -147,6 +148,6 @@ export default function ConfigureDataSourcesModal() {
           {loading && <h1>Loading...</h1>}
         </Box>
       </Modal>
-    </div>
+    </Box>
   );
 }

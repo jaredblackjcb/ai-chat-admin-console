@@ -4,7 +4,7 @@ import { aiSlice } from "../reducers/aiReducers";
 
 export const store = configureStore({
   reducer: {
-    userLogin: userSlice.reducer,
+    user: userSlice.reducer,
     aiInfo: aiSlice.reducer,
   },
 });

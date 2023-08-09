@@ -95,7 +95,7 @@ export default function App() {
 }
 
 const RequireAuth = ({ children }) => {
-  const { userInfo } = useSelector((state) => state.userLogin) || {};
+  const { userInfo } = useSelector((state) => state.user) || {};
   let location = useLocation();
   console.log("requireAuth triggered", location, userInfo);
   // Redirect them to the /login page, but save the current location they were
@@ -108,7 +108,7 @@ const RequireAuth = ({ children }) => {
 };
 
 const RestrictForAuth = ({ children }) => {
-  const { userInfo } = useSelector((state) => state.userLogin) || {};
+  const { userInfo } = useSelector((state) => state.user) || {};
   const location = useLocation();
   console.log("location.state", location.state);
   let { pathname } = location.state?.from || { pathname: "/dashboard" };

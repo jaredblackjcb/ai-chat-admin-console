@@ -10,7 +10,7 @@ import { register, googleAuth } from "../actions/userActions";
 export default function Signup() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { loading, error } = useSelector((state) => state.userLogin) || {};
+  const { loading, error } = useSelector((state) => state.user) || {};
   const dispatch = useDispatch();
 
   const handleSubmit = (event) => {

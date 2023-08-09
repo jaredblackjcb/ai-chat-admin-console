@@ -2,13 +2,13 @@ import axios from "axios";
 
 import { ENCODE_FILES_REQUEST, ENCODE_FILES_RESPONSE, ENCODE_FILES_ERROR } from "../constants/aiConstants";
 
-export const encodeFiles = (formData, namespace) => async (dispatch) => {
+export const encodeFiles = (formData, namespace, userId) => async (dispatch) => {
   try {
     dispatch({
       type: ENCODE_FILES_REQUEST,
     });
     const { data } = await axios.post("chat/encode/files", formData, {
-      headers: { "Content-Type": "multipart/form-data", namespace: namespace },
+      headers: { "Content-Type": "multipart/form-data", namespace: namespace, userId: userId },
     });
     dispatch({
       type: ENCODE_FILES_RESPONSE,

@@ -7,7 +7,7 @@ import { logout } from "../actions/userActions";
 
 export default function Header(props) {
   // Destructure any properties that were set in userReducers slice.reducers
-  const { userInfo, error, loading } = useSelector((state) => state.userLogin || {});
+  const { userInfo, error, loading } = useSelector((state) => state.user || {});
   console.log("header " + userInfo);
   console.log("header " + error);
   console.log("header " + loading);
