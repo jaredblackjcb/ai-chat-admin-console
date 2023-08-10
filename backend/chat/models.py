@@ -1,6 +1,7 @@
 from django.db import models
 from django.conf import settings
-import datetime
+from django.utils import timezone
+
 # Create your models here.
 class ChatDataSource(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
@@ -18,7 +19,7 @@ class ChatDataSource(models.Model):
         return f"{self.user_id}-{self.file_name}-{self.namespace}"
     
     def save(self, *args, **kwargs):
-        self.last_modified = datetime.datetime.utcnow()
+        self.last_modified = timezone.now()
         super().save(*args, **kwargs)
 
 class Namespace(models.Model):
