@@ -1,6 +1,7 @@
+import React, { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+
 import { Box, Button } from "@mui/material";
-import { DataGrid } from "@mui/x-data-grid";
-import React from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -9,19 +10,17 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 
-export default function DataSourcesManager() {
-  // Table version
-  function createTableRow(id, fileName, namespace, lastModified) {
-    return { id, fileName, namespace, lastModified };
-  }
+import { fetchDataSources } from "../actions/aiActions";
 
-  // Get data sources data for user
-  const rows = [
-    createTableRow(1, "testfilename.pdf", "testnamespace", "testlastmodifiedDate"),
-    createTableRow(2, "testfilename.pdf", "testnamespace", "testlastmodifiedDate"),
-    createTableRow(3, "testfilename.pdf", "testnamespace", "testlastmodifiedDate"),
-    createTableRow(4, "testfilename.pdf", "testnamespace", "testlastmodifiedDate"),
-  ];
+export default function DataSourcesManager() {
+  const dispatch = useDispatch();
+  const { loading, error, aiInfo } = useSelector((state) => state.aiInfo || {});
+  const userId = useSelector((state) => state.user.userInfo.user_id);
+
+  useEffect(() => {
+    // Fetch data sources when component mounts
+    dispatch(fetchDataSources(userId));
+  }, [dispatch, userId]);
 
   return (
     <Box>
@@ -38,19 +37,25 @@ export default function DataSourcesManager() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row) => (
-              <TableRow key={row.id}>
-                <TableCell>{row.fileName}</TableCell>
-                <TableCell>{row.namespace}</TableCell>
-                <TableCell>{row.lastModified}</TableCell>
-                <TableCell>
-                  <Button>Edit</Button>
-                </TableCell>
-                <TableCell>
-                  <Button>Delete</Button>
-                </TableCell>
+            {aiInfo && aiInfo.data_sources ? (
+              aiInfo.data_sources.map((row) => (
+                <TableRow key={row.id}>
+                  <TableCell>{row.file_name}</TableCell>
+                  <TableCell>{row.namespace}</TableCell>
+                  <TableCell>{row.last_modified}</TableCell>
+                  <TableCell>
+                    <Button>Edit</Button>
+                  </TableCell>
+                  <TableCell>
+                    <Button>Delete</Button>
+                  </TableCell>
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell colSpan={5}>Loading...</TableCell>
               </TableRow>
-            ))}
+            )}
           </TableBody>
         </Table>
       </TableContainer>

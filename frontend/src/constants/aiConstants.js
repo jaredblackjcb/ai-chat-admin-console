@@ -1,3 +1,9 @@
 export const ENCODE_FILES_REQUEST = "ai/encodeFilesRequest";
-export const ENCODE_FILES_RESPONSE = "ai/encodeFilesResponse";
+export const ENCODE_FILES_SUCCESS = "ai/encodeFilesSuccess";
 export const ENCODE_FILES_ERROR = "ai/encodeFilesError";
+export const FETCH_DATA_SOURCES_REQUEST = "ai/fetchDataSourcesRequest";
+export const FETCH_DATA_SOURCES_SUCCESS = "ai/fetchDataSourcesSuccess";
+export const FETCH_DATA_SOURCES_ERROR = "ai/fetchDataSourcesError";
+export const FETCH_NAMESPACES_REQUEST = "ai/fetchNamespacesRequest";
+export const FETCH_NAMESPACES_SUCCESS = "ai/fetchNamespacesSuccess";
+export const FETCH_NAMESPACES_ERROR = "ai/fetchNamespacesError";

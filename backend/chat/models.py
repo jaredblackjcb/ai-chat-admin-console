@@ -16,7 +16,7 @@ class ChatDataSource(models.Model):
         ]
 
     def __str__(self):
-        return f"{self.user_id}-{self.file_name}-{self.namespace}"
+        return f"{self.file_name}-{self.namespace}"
     
     def save(self, *args, **kwargs):
         self.last_modified = timezone.now()

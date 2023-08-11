@@ -6,6 +6,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
 from .models import Namespace, File, FileNamespace, ChatDataSource
 from .pinecone_utils import PineconeUtils
+from .serializers import ChatDataSourceSerializer
 
 # Create your views here.
 @api_view(['POST'])
@@ -51,7 +52,8 @@ def add_namespaces(request):
 @api_view(['GET'])
 def get_data_sources(request, user_id):
     data_sources = list(ChatDataSource.objects.filter(user_id=user_id))
-    response = {'data_sources': data_sources}
+    serializer = ChatDataSourceSerializer(data_sources, many=True)
+    response = {'data_sources': serializer.data}
     return Response(response)
 
 
