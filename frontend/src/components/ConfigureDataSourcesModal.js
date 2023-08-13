@@ -74,6 +74,7 @@ export default function ConfigureDataSourcesModal() {
     });
     // Send files to backend to upload vectors to pinecone (include userId + namespace and vectors)
     dispatch(encodeFiles(formData, namespace, userId));
+    handleClose();
   };
 
   return (
@@ -84,8 +85,8 @@ export default function ConfigureDataSourcesModal() {
       <Modal
         open={open}
         onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
+        aria-labelledby="modal-configure-data-sources"
+        aria-describedby="modal-upload-files-for-chat-sources"
       >
         <Box sx={style}>
           <Typography id="modal-modal-title" variant="h6" component="h2">
@@ -131,8 +132,9 @@ export default function ConfigureDataSourcesModal() {
               label="Namespace"
               onChange={handleNamespaceChange}
             >
-              <MenuItem value={"test"}>test</MenuItem>
-              <MenuItem value={"test2"}>test2</MenuItem>
+              <MenuItem value={"test7"}>test7</MenuItem>
+              <MenuItem value={"test8"}>test8</MenuItem>
+              <MenuItem value={"test9"}>test9</MenuItem>
             </Select>
           </FormControl>
 

@@ -16,7 +16,7 @@ export const aiSlice = createSlice({
     encodeFilesRequest(state) {
       return { loading: true };
     },
-    encodeFilesResponse(state, action) {
+    encodeFilesSuccess(state, action) {
       return { loading: false, aiInfo: action.payload };
     },
     encodeFilesError(state, action) {
@@ -38,6 +38,29 @@ export const aiSlice = createSlice({
       return { loading: false, aiInfo: action.payload };
     },
     fetchDataSourcesError(state, action) {
+      return { loading: false, error: action.payload };
+    },
+    deleteDataSourceRequest(state) {
+      return { ...state, loading: true };
+    },
+    deleteDataSourceSuccess(state, action) {
+      const deletedItemId = action.payload.deletedItemId; // Assuming you get the ID of the deleted item from the payload
+      console.log(deletedItemId);
+      // Create a new array excluding the deleted item
+      const updatedDataSources = state.aiInfo?.data_sources.filter((dataSource) => dataSource.id !== deletedItemId);
+      console.log("data sources: ", state?.aiInfo?.data_sources);
+      console.log(updatedDataSources);
+      // Return the updated state with the modified dataSources array
+      return {
+        ...state,
+        loading: false,
+        aiInfo: {
+          ...state.aiInfo,
+          data_sources: updatedDataSources,
+        },
+      };
+    },
+    deleteDataSourceError(state, action) {
       return { loading: false, error: action.payload };
     },
   },

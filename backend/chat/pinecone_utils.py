@@ -13,10 +13,10 @@ from django.conf import settings
 
 class PineconeUtils():
     
-    def __init__(self, namespace, context=None):
-        self.namespace = namespace
-        self.context = context
-        self.index = os.environ.get('PINECONE_INDEX')
+    def __init__(self, user_id, namespace, context=None):
+        self.namespace = user_id + '-' + namespace
+        self.context = context # optional conversation context
+        self.index_name = os.environ.get('PINECONE_INDEX')
         pinecone.init(api_key=os.environ.get('PINECONE_API_KEY'),
                     environment=os.environ.get('PINECONE_ENV'))
         
@@ -28,7 +28,7 @@ class PineconeUtils():
             with open(temp_file_path, 'wb') as temp_file:
                 for chunk in file_obj.chunks():
                     temp_file.write(chunk)
-
+            # TODO: Add a loader method to determine the best way to load each file
             loader = PyPDFLoader(temp_file_path)
             documents += loader.load()
             
@@ -42,11 +42,11 @@ class PineconeUtils():
         chunks = text_splitter.split_documents(documents)
         embeddings = OpenAIEmbeddings()
         # Generate document vectors and automatically upsert them into Pinecone
-        vector_store = Pinecone.from_documents(chunks, embeddings, index_name=self.index, namespace=self.namespace)
+        vector_store = Pinecone.from_documents(chunks, embeddings, index_name=self.index_name, namespace=self.namespace)
         
     def get_reply(self, query):
         embeddings = OpenAIEmbeddings()
-        vector_store = Pinecone.from_existing_index(index_name=self.index, embedding=embeddings, namespace=self.namespace)
+        vector_store = Pinecone.from_existing_index(index_name=self.index_name, embedding=embeddings, namespace=self.namespace)
         relevant_docs = vector_store.similarity_search(query)
         print(relevant_docs)
 
@@ -66,7 +66,10 @@ class PineconeUtils():
         else:
             print(f"Index {index_name} already exists")
 
-
+    def delete_data_source(self, file_name):
+        index = pinecone.Index(self.index_name)
+        file_path = os.path.join(settings.MEDIA_ROOT, file_name)
+        index.delete(namespace=self.namespace, filter={"source": file_path})
 
     def _generate_chat_history(self):
         history = ChatMessageHistory()
@@ -78,6 +81,5 @@ class PineconeUtils():
         return history
 
     def _get_relevant_context_data(self, query):
-
         return vector_store.similarity_search(query, namespace=self.namespace)
 

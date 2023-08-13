@@ -7,3 +7,6 @@ export const FETCH_DATA_SOURCES_ERROR = "ai/fetchDataSourcesError";
 export const FETCH_NAMESPACES_REQUEST = "ai/fetchNamespacesRequest";
 export const FETCH_NAMESPACES_SUCCESS = "ai/fetchNamespacesSuccess";
 export const FETCH_NAMESPACES_ERROR = "ai/fetchNamespacesError";
+export const DELETE_DATA_SOURCE_REQUEST = "ai/deleteDataSourceRequest";
+export const DELETE_DATA_SOURCE_SUCCESS = "ai/deleteDataSourceSuccess";
+export const DELETE_DATA_SOURCE_ERROR = "ai/deleteDataSourceError";

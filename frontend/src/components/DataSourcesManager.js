@@ -11,6 +11,7 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 
 import { fetchDataSources } from "../actions/aiActions";
+import DeleteModal from "./DeleteModal";
 
 export default function DataSourcesManager() {
   const dispatch = useDispatch();
@@ -44,10 +45,10 @@ export default function DataSourcesManager() {
                   <TableCell>{row.namespace}</TableCell>
                   <TableCell>{row.last_modified}</TableCell>
                   <TableCell>
-                    <Button>Edit</Button>
+                    <Button>UPDATE</Button>
                   </TableCell>
                   <TableCell>
-                    <Button>Delete</Button>
+                    <DeleteModal id={row.id} />
                   </TableCell>
                 </TableRow>
               ))

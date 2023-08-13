@@ -28,14 +28,15 @@ def encode_files(request):
             data_source_inserted, created = ChatDataSource.objects.get_or_create(user_id=user_id, file_name=file_name, namespace=namespace)
 
         # Process the list of uploaded files
-        pinecone_utils = PineconeUtils(namespace=(namespace + '-' + user_id))
+        pinecone_utils = PineconeUtils(user_id=user_id, namespace=namespace)
 
         # Convert documents to vectors and upload to pinecone index
         pinecone_utils.encode_documents(files.values())
+        response = get_user_data_sources(user_id)
     except:
         return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-    return Response(status=status.HTTP_201_CREATED)
+    return Response(response)
 
 @api_view(['POST'])
 def add_namespaces(request):
@@ -51,11 +52,8 @@ def add_namespaces(request):
 
 @api_view(['GET'])
 def get_data_sources(request, user_id):
-    data_sources = list(ChatDataSource.objects.filter(user_id=user_id))
-    serializer = ChatDataSourceSerializer(data_sources, many=True)
-    response = {'data_sources': serializer.data}
+    response = get_user_data_sources(user_id)
     return Response(response)
-
 
 @api_view(['GET'])
 def get_namespaces(request, user_id):
@@ -63,3 +61,21 @@ def get_namespaces(request, user_id):
     response = {'namespaces': namespaces}
     return Response(response)
 
+@api_view(['DELETE'])
+def delete_data_source(request, file_name, namespace):
+    user_id = request.headers['userId']
+    try:
+        # Delete the vector data from Pinecone
+        pinecone_utils = PineconeUtils(user_id=user_id, namespace=namespace)
+        pinecone_utils.delete_data_source(file_name)
+        # Delete the reference to the data source from Postgres
+        ChatDataSource.objects.filter(
+            user_id=user_id, file_name=file_name, namespace=namespace).delete()
+    except:
+        return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    return Response(status=status.HTTP_202_ACCEPTED)
+
+def get_user_data_sources(user_id):
+    data_sources = list(ChatDataSource.objects.filter(user_id=user_id))
+    serializer = ChatDataSourceSerializer(data_sources, many=True)
+    return {'data_sources': serializer.data}
