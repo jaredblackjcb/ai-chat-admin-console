@@ -36,9 +36,7 @@ export default function DeleteModal({ id }) {
       return []; // Return an empty array or handle the absence of dataSources appropriately.
     }
   });
-  // const userId = useSelector((state) => state.user?.userInfo.user_id || {});
 
-  // const dataSource = useSelector((state) => state.aiInfo.dataSources.filter((dataSource) => dataSource.id === id));
   // Define actions for dispatching the delete event
   const handleDelete = async (event) => {
     event.preventDefault();

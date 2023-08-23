@@ -8,7 +8,7 @@ When the installation is complete, run 'npm start' to launch the react app.
 In the backend directory, create the css files and javascript bundles by running webpack using 'npm run build-dev'.
 This will watch for changes to files in the assets directory and re-run the webpack pipeline on save.
 
-Download the .env file from [GOOGLE DRIVE LINK] to get database access.
+Download the .env file from https://docs.google.com/document/d/1yutbL91R3aIsGJvE1APxhhlYBPRqsh9-M_eUvLOhBQo/edit to get database access.
 
 Launch the Django backend by running 'python manage.py runserver'.
 

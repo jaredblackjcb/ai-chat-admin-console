@@ -12,11 +12,12 @@ import Paper from "@mui/material/Paper";
 
 import { fetchDataSources } from "../actions/aiActions";
 import DeleteModal from "./DeleteModal";
+import { translateToUserFriendlyDate } from "../utils";
 
 export default function DataSourcesManager() {
   const dispatch = useDispatch();
   const { loading, error, aiInfo } = useSelector((state) => state.aiInfo || {});
-  const userId = useSelector((state) => state.user.userInfo.user_id);
+  const userId = useSelector((state) => state.user?.userInfo?.id);
 
   useEffect(() => {
     // Fetch data sources when component mounts
@@ -33,30 +34,28 @@ export default function DataSourcesManager() {
               <TableCell>File Name</TableCell>
               <TableCell>Namespace</TableCell>
               <TableCell>Last Modified</TableCell>
-              <TableCell>Edit</TableCell>
               <TableCell>Delete</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
+            {/* Display data sources if they exist */}
             {aiInfo && aiInfo.data_sources ? (
               aiInfo.data_sources.map((row) => (
                 <TableRow key={row.id}>
                   <TableCell>{row.file_name}</TableCell>
                   <TableCell>{row.namespace}</TableCell>
-                  <TableCell>{row.last_modified}</TableCell>
-                  <TableCell>
-                    <Button>UPDATE</Button>
-                  </TableCell>
+                  <TableCell>{translateToUserFriendlyDate(row.last_modified)}</TableCell>
                   <TableCell>
                     <DeleteModal id={row.id} />
                   </TableCell>
                 </TableRow>
               ))
-            ) : (
+            ) : // Display the loading component while waiting for data to load
+            loading ? (
               <TableRow>
-                <TableCell colSpan={5}>Loading...</TableCell>
+                <TableCell colSpan={4}>Loading...</TableCell>
               </TableRow>
-            )}
+            ) : null}
           </TableBody>
         </Table>
       </TableContainer>
