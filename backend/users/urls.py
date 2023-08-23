@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, re_path, include
 from . import views
 
 urlpatterns = [
@@ -7,4 +7,5 @@ urlpatterns = [
      path('profile/', views.getUserProfile, name='user_profile'),
      path('all/', views.getAllUsers, name='all_users'),
      path('google-auth/', views.googleAuth, name='google_auth'),
+     re_path(r'^auth/', include('drf_social_oauth2.urls', namespace='drf'))
 ]

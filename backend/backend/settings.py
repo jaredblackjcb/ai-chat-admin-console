@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'anymail',
     'oauth2_provider',
+    'drf_social_oauth2',
 
     # Local apps
     'base',
