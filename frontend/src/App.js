@@ -1,5 +1,5 @@
 import React from "react";
-import { Routes, Navigate, Outlet, useLocation, Route, HashRouter, BrowserRouter } from "react-router-dom";
+import { Routes, Navigate, Outlet, useLocation, Route, BrowserRouter } from "react-router-dom";
 import { Provider } from "react-redux";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import Home from "./screens/Home";
@@ -48,6 +48,14 @@ export default function App() {
                 element={
                   <RestrictForAuth>
                     <Login />
+                  </RestrictForAuth>
+                }
+              />
+              <Route
+                path="resetPassword"
+                element={
+                  <RestrictForAuth>
+                    <ChangePassword />
                   </RestrictForAuth>
                 }
               />
@@ -107,20 +115,32 @@ const RequireAuth = ({ children }) => {
   return userInfo ? children : <Navigate to="/login" state={{ from: location }} replace />;
 };
 
+// Detects whether a user is logged in by checking the userInfo property of the
+// user from the Redux state. If it exists, the user is redirected to a logged in page.
 const RestrictForAuth = ({ children }) => {
+  // Access the userInfo property from the Redux state using the useSelector hook
   const { userInfo } = useSelector((state) => state.user) || {};
+
+  // Access the current location using the useLocation hook
   const location = useLocation();
   console.log("location.state", location.state);
+
+  // Access the 'from' property of the location's state or set it to '/dashboard' if not available
   let { pathname } = location.state?.from || { pathname: "/dashboard" };
   console.log("pathname: " + pathname);
+
+  // Check if the current pathname includes 'login' or 'register', and if so, set the pathname to '/dashboard'
   if (pathname.includes("login") || pathname.includes("register")) {
     pathname = "/dashboard";
     console.log("pathname: " + pathname);
   }
   console.log("pathname: " + pathname);
+
+  // If userInfo is available (user is logged in), redirect to the determined pathname
   return userInfo ? <Navigate to={pathname} state={{ from: location }} replace /> : children;
 };
 
+// RootLayout component that acts as the layout structure for the app
 const RootLayout = () => {
   return (
     <>
