@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { login } from "../actions/userActions";
 import { useDispatch, useSelector } from "react-redux";
+import { GoogleLogin } from "@react-oauth/google";
 
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
@@ -12,6 +13,8 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 
+import { googleAuth } from "../actions/userActions";
+
 export default function Login() {
   const dispatch = useDispatch();
   const { error, loading } = useSelector((state) => state.user) || {};
@@ -21,7 +24,16 @@ export default function Login() {
     const data = new FormData(event.currentTarget);
     dispatch(login(data.get("email"), data.get("password")));
   };
+  const handleGoogleAuthSuccess = (response) => {
+    // Destructure the credential from the Google Sign-In response here
+    const { credential } = response;
+    // Call Google Auth action here, passing the  client token credential
+    dispatch(googleAuth(credential));
+  };
 
+  const handleGoogleAuthFailure = (error) => {
+    console.log("Google Sign-In failed:", error);
+  };
   return (
     <Container component="main" maxWidth="xs">
       {/* TODO: Add custom error and loader components */}
@@ -63,6 +75,14 @@ export default function Login() {
           <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
             Sign In
           </Button>
+        </Box>
+        <GoogleLogin
+          onSuccess={(credentialResponse) => {
+            handleGoogleAuthSuccess(credentialResponse);
+          }}
+          onError={handleGoogleAuthFailure(error)}
+        />
+        <Box sx={{ mt: 3 }}>
           <Grid container>
             <Grid item xs>
               <Link to={"/resetPassword"}>Forgot password?</Link>
