@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
-import { Box, Button } from "@mui/material";
+import { Box } from "@mui/material";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -58,6 +58,7 @@ export default function DataSourcesManager() {
             ) : null}
           </TableBody>
         </Table>
+        {error && <h1>{error}</h1>}
       </TableContainer>
     </Box>
   );
