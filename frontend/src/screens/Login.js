@@ -82,16 +82,14 @@ export default function Login() {
           }}
           onError={handleGoogleAuthFailure(error)}
         />
-        <Box sx={{ mt: 3 }}>
-          <Grid container>
-            <Grid item xs>
-              <Link to={"/resetPassword"}>Forgot password?</Link>
-            </Grid>
-            <Grid item>
-              <Link to={"/signup"}>{"Don't have an account? Sign Up"}</Link>
-            </Grid>
+        <Grid sx={{ mt: 3 }} container>
+          <Grid item xs>
+            <Link to={"/resetPassword"}>Forgot password?</Link>
           </Grid>
-        </Box>
+          <Grid item>
+            <Link to={"/signup"}>{"Don't have an account? Sign Up"}</Link>
+          </Grid>
+        </Grid>
       </Box>
     </Container>
   );

@@ -28,6 +28,7 @@ export default function Signup() {
       minLowercase: 1,
       minUppercase: 1,
       minNumbers: 1,
+      minSymbols: 0,
     });
   };
 
