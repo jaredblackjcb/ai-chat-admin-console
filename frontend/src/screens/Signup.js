@@ -1,21 +1,40 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { Container, Button, Row, Col, Form, FormControl, Card } from "react-bootstrap";
-import { FcGoogle } from "react-icons/fc";
 import { GoogleLogin } from "@react-oauth/google";
+import Button from "@mui/material/Button";
+import TextField from "@mui/material/TextField";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Checkbox from "@mui/material/Checkbox";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import Container from "@mui/material/Container";
+import isEmail from "validator/lib/isEmail";
+import isStrongPassword from "validator/lib/isStrongPassword";
 
 import { register, googleAuth } from "../actions/userActions";
 
 export default function Signup() {
   const [email, setEmail] = useState("");
+  const [emailBlurred, setEmailBlurred] = useState(false);
   const [password, setPassword] = useState("");
+  const [passwordBlurred, setPasswordBlurred] = useState(false);
+  const [checked, setChecked] = useState(false);
   const { loading, error } = useSelector((state) => state.user) || {};
   const dispatch = useDispatch();
+  const isValidPassword = (password) => {
+    return isStrongPassword(password, {
+      minLength: 8,
+      minLowercase: 1,
+      minUppercase: 1,
+      minNumbers: 1,
+    });
+  };
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    dispatch(register(email, password));
+    const data = new FormData(event.currentTarget);
+    dispatch(register(data.get("email"), data.get("password")));
   };
 
   const handleGoogleAuthSuccess = (response) => {
@@ -29,101 +48,84 @@ export default function Signup() {
     console.log("Google Sign-In failed:", error);
   };
 
+  const isFormValid = isEmail(email) && isValidPassword(password) && checked;
+
   return (
-    <Container fluid>
-      ;{/* TODO: Add custom error and loader components */}
+    <Container component="main" maxWidth="xs">
+      {/* TODO: Add custom error and loader components */}
       {error && <h1>{error}</h1>}
       {loading && <h1>Loading...</h1>}
-      <Row>
-        <Col md={6} className="p-0 d-lg-flex d-none h-100 my-auto position-absolute top-0 start-0 text-center">
-          <Container
-            className="position-relative bg-gradient-primary h-100 m-3 px-7 border-radius-lg d-flex flex-column justify-content-center"
-            style={{
-              backgroundImage: `url('https://github.com/creativetimofficial/material-dashboard/blob/master/assets/img/illustrations/illustration-signup.jpg?raw=true')`,
-              backgroundSize: "cover",
-            }}
-          ></Container>
-        </Col>
-        <Col sm={7} md={5} lg={5} className="d-flex flex-column ms-auto me-auto ms-lg-auto me-lg-5">
-          <Card className="card-plain mt-md-9 mt-6">
-            <Container className="px-4">
-              <h4 className="font-weight-bolder">Sign up</h4>
-              <p className="mb-0">Enter your email and password to register</p>
-            </Container>
-            <Card.Body>
-              <Form onSubmit={handleSubmit}>
-                <Form.Group className="mb-3 input-group-dynamic" controlId="formBasicEmail">
-                  <Form.Label>Email</Form.Label>
-                  <Form.Control
-                    className="form-control"
-                    type="email"
-                    name="email"
-                    placeholder="Email address"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                  />
-                  <FormControl.Feedback type="invalid"></FormControl.Feedback>
-                </Form.Group>
+      <Box
+        sx={{
+          marginTop: 8,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
+        <Typography component="h1" variant="h5">
+          Create Account
+        </Typography>
+        <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+          <TextField
+            onChange={(e) => setEmail(e.target.value)}
+            onBlur={() => setEmailBlurred(true)}
+            margin="normal"
+            required
+            fullWidth
+            id="email"
+            label="Email Address"
+            name="email"
+            autoComplete="email"
+            error={emailBlurred && !isEmail(email)}
+            helperText={emailBlurred && !isEmail(email) ? "Please enter a valid email address" : ""}
+          />
+          <TextField
+            onChange={(e) => setPassword(e.target.value)}
+            onBlur={() => setPasswordBlurred(true)}
+            margin="normal"
+            required
+            fullWidth
+            name="password"
+            label="Password"
+            type="password"
+            id="password"
+            autoComplete="current-password"
+            error={passwordBlurred && !isValidPassword(password)}
+            helperText={
+              passwordBlurred && !isValidPassword(password)
+                ? "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, and one number"
+                : ""
+            }
+          />
+          <FormControlLabel
+            control={<Checkbox value="remember" color="primary" />}
+            label={
+              <span>
+                I agree to the{" "}
+                <a href="/terms/" target="_blank" className="text-dark font-weight-bolder">
+                  Terms and Conditions
+                </a>
+              </span>
+            }
+            onChange={() => setChecked(!checked)}
+          />
+          {/* Disable the submit button until the form is valid */}
 
-                <Form.Group className="mb-3 input-group-static" controlId="formBasicPassword">
-                  <Form.Label>Password</Form.Label>
-                  <Form.Control
-                    className="form-control"
-                    type="password"
-                    name="password"
-                    placeholder="Enter password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                  />
-                  <Form.Control.Feedback type="invalid"></Form.Control.Feedback>
-                </Form.Group>
-                <Form.Check className="form-check-info text-start ps-0">
-                  <Form.Check.Input
-                    className="form-check-input"
-                    type="checkbox"
-                    value=""
-                    id="flexCheckDefault"
-                    defaultChecked
-                  />
-                  <Form.Check.Label className="form-check-label" htmlFor="flexCheckDefault">
-                    I agree to the{" "}
-                    <a href="/terms/" target="_blank" className="text-dark font-weight-bolder">
-                      Terms and Conditions
-                    </a>
-                  </Form.Check.Label>
-                </Form.Check>
-                <Button className="btn btn-primary w-100" type="submit" color="primary" onClick={handleSubmit}>
-                  Sign up
-                </Button>
-                <Button className="btn btn-outline-secondary w-100" type="button" onClick={handleSubmit}>
-                  <div className="d-flex align-items-center justify-content-center">
-                    <span className="pg-icon">
-                      <FcGoogle size={"2em"} />
-                    </span>
-                    <p> </p>
-                    Continue with Google
-                  </div>
-                </Button>
-                <GoogleLogin
-                  onSuccess={(credentialResponse) => {
-                    handleGoogleAuthSuccess(credentialResponse);
-                  }}
-                  onError={handleGoogleAuthFailure(error)}
-                />
-              </Form>
-            </Card.Body>
-            <hr />
-            <Card.Footer className="text-center pt-0 px-lg-2 px-1">
-              <p className="mb-2 text-sm mx-auto">
-                Already have account?{" "}
-                <Link className="text-primary text-gradient font-weight-bold" to="/login">
-                  Login
-                </Link>
-              </p>
-            </Card.Footer>
-          </Card>
-        </Col>
-      </Row>
+          <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }} disabled={!isFormValid}>
+            CREATE ACCOUNT
+          </Button>
+        </Box>
+        <GoogleLogin
+          onSuccess={(credentialResponse) => {
+            handleGoogleAuthSuccess(credentialResponse);
+          }}
+          onError={handleGoogleAuthFailure(error)}
+        />
+        <Box sx={{ mt: 3 }}>
+          <Link to={"/login"}>{"Already have an account? Sign in"}</Link>
+        </Box>
+      </Box>
     </Container>
   );
 }
