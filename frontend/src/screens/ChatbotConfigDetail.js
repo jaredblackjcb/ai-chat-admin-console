@@ -9,7 +9,6 @@ export default function ChatbotConfigDetail() {
   const { namespace } = useParams();
   return (
     <Container>
-      <h1>Configure Chatbot</h1>
       <ConfigureDataSourcesModal namespace={namespace} />
       <DataSourcesManager namespace={namespace} />
       <ChatbotSettings namespace={namespace} />

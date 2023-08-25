@@ -14,7 +14,13 @@ const CopyToClipboardButton = ({ text }) => {
       <Button onClick={handleClick}>
         <ContentCopyIcon />
       </Button>
-      <Snackbar open={open} onClose={() => setOpen(false)} autoHideDuration={2000} message="Copied to clipboard" />
+      <Snackbar
+        open={open}
+        onClose={() => setOpen(false)}
+        autoHideDuration={2000}
+        message="Copied to clipboard"
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      />
     </>
   );
 };

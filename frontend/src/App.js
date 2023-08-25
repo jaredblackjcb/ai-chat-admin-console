@@ -102,6 +102,14 @@ export default function App() {
                     </RequireAuth>
                   }
                 />
+                <Route
+                  path="subscription/manage"
+                  element={
+                    <RequireAuth>
+                      <ManageSubscription />
+                    </RequireAuth>
+                  }
+                />
               </Route>
             </Routes>
           </BrowserRouter>

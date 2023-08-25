@@ -32,7 +32,6 @@ export default function DataSourcesManager({ namespace }) {
           <TableHead>
             <TableRow>
               <TableCell>File Name</TableCell>
-              <TableCell>Namespace</TableCell>
               <TableCell>Last Modified</TableCell>
               <TableCell>Delete</TableCell>
             </TableRow>
@@ -45,7 +44,6 @@ export default function DataSourcesManager({ namespace }) {
                 .map((row) => (
                   <TableRow key={row.id}>
                     <TableCell>{row.file_name}</TableCell>
-                    <TableCell>{row.namespace}</TableCell>
                     <TableCell>{translateToUserFriendlyDate(row.last_modified)}</TableCell>
                     <TableCell>
                       <DeleteModal id={row.id} />

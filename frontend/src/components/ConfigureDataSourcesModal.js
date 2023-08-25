@@ -1,14 +1,10 @@
-import * as React from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import Select from "@mui/material/Select";
-import FormControl from "@mui/material/FormControl";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
@@ -17,8 +13,12 @@ import Avatar from "@mui/material/Avatar";
 import IconButton from "@mui/material/IconButton";
 import FolderIcon from "@mui/icons-material/Folder";
 import DeleteIcon from "@mui/icons-material/Delete";
+import FileUploadIcon from "@mui/icons-material/FileUpload";
+import LoadingButton from "@mui/lab/LoadingButton";
+import SaveIcon from "@mui/icons-material/Save";
 
 import { encodeFiles } from "../actions/aiActions";
+import { Grid } from "@mui/material";
 
 const style = {
   position: "absolute",
@@ -33,53 +33,71 @@ const style = {
 };
 
 export default function ConfigureDataSourcesModal({ namespace }) {
-  const [open, setOpen] = React.useState(false);
-  const [dense, setDense] = React.useState(true);
-  const [secondary, setSecondary] = React.useState(false);
-  const [fileNames, setFileNames] = React.useState([]);
-  const [files, setFiles] = React.useState([]);
+  const [open, setOpen] = useState(false);
+  const [dense, setDense] = useState(true);
+  // List of file names
+  const [fileNames, setFileNames] = useState([]);
+  // List of file objects
+  const [files, setFiles] = useState([]);
   const { loading, error } = useSelector((state) => state.aiInfo || {});
   const userId = useSelector((state) => state.user?.userInfo?.id);
 
   const dispatch = useDispatch();
 
+  // Open and close the modal
   const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const handleClose = () => {
+    setFileNames([]);
+    setFiles([]);
+    setOpen(false);
+  };
 
+  // Update the list of files and file names when a file is uploaded
   const handleFileChange = (event) => {
     // Get a list of files and file names
     const uploadedFiles = event.target.files;
     const names = Array.from(uploadedFiles).map((file) => file.name);
-
     setFiles([...files, ...uploadedFiles]);
     setFileNames([...fileNames, ...names]);
   };
+
+  // Update the list of files and file names when a file is uploaded
   function handleDeleteFile(index) {
     const updatedFileNames = fileNames.filter((_, i) => i !== index);
     setFileNames(updatedFileNames);
-
     const updatedFiles = files.filter((_, i) => i !== index);
     setFiles(updatedFiles);
   }
-  const handleSave = (event) => {
+
+  // Send the files to the backend to be uploaded to Amazon s3 and Pinecone
+  const handleSave = async (event) => {
     event.preventDefault();
     // Add the files to a formData object
     const formData = new FormData();
     files.forEach((file, index) => {
       formData.append(`file${index}`, file);
     });
-    // Send files to backend to upload vectors to pinecone (include userId + namespace and vectors)
-    dispatch(encodeFiles(formData, namespace, userId));
-    setFileNames([]);
-    setFiles([]);
-    handleClose();
+    try {
+      await dispatch(encodeFiles(formData, namespace, userId));
+      handleClose();
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
     <Box>
-      <Button variant="contained" onClick={handleOpen}>
-        Configure Data Sources
-      </Button>
+      <Grid container justifyContent="space-between" alignItems="center" marginBottom={2}>
+        <Grid item>
+          <Typography variant="h4">Configure Test Chatbot</Typography>
+        </Grid>
+        <Grid item>
+          <Button variant="contained" onClick={handleOpen}>
+            <FileUploadIcon sx={{ mr: 1 }} />
+            UPLOAD FILES
+          </Button>
+        </Grid>
+      </Grid>
       <Modal
         open={open}
         onClose={handleClose}
@@ -93,6 +111,7 @@ export default function ConfigureDataSourcesModal({ namespace }) {
 
           {/* File upload input */}
           <Button variant="outlined" component="label">
+            <FileUploadIcon sx={{ mr: 1 }} />
             UPLOAD FILES
             <input type="file" multiple accept=".pdf, .txt" hidden onChange={handleFileChange} />
           </Button>
@@ -119,16 +138,24 @@ export default function ConfigureDataSourcesModal({ namespace }) {
             ))}
           </List>
 
-          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+          <Typography id="modal-modal-description" sx={{ mt: 2, mb: 2 }}>
             Saving will add the uploaded data to the information used by your chatbot configured with the same
             namespace.
           </Typography>
-
-          <Button variant="contained" onClick={handleSave}>
-            SAVE
+          <LoadingButton
+            loading={loading}
+            loadingPosition="start"
+            startIcon={<SaveIcon />}
+            variant="contained"
+            onClick={handleSave}
+            sx={{ marginRight: 2 }}
+          >
+            Save
+          </LoadingButton>
+          <Button variant="outlined" disabled={loading} onClick={handleClose}>
+            CANCEL
           </Button>
           {error && <h1>{error}</h1>}
-          {loading && <h1>Loading...</h1>}
         </Box>
       </Modal>
     </Box>
