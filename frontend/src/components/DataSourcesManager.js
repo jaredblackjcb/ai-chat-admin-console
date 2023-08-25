@@ -14,7 +14,7 @@ import { fetchDataSources } from "../actions/aiActions";
 import DeleteModal from "./DeleteModal";
 import { translateToUserFriendlyDate } from "../utils";
 
-export default function DataSourcesManager() {
+export default function DataSourcesManager({ namespace }) {
   const dispatch = useDispatch();
   const { loading, error, aiInfo } = useSelector((state) => state.aiInfo || {});
   const userId = useSelector((state) => state.user?.userInfo?.id);
@@ -38,18 +38,20 @@ export default function DataSourcesManager() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {/* Display data sources if they exist */}
+            {/* Display data sources associated with the given namespace if they exist */}
             {aiInfo && aiInfo.data_sources ? (
-              aiInfo.data_sources.map((row) => (
-                <TableRow key={row.id}>
-                  <TableCell>{row.file_name}</TableCell>
-                  <TableCell>{row.namespace}</TableCell>
-                  <TableCell>{translateToUserFriendlyDate(row.last_modified)}</TableCell>
-                  <TableCell>
-                    <DeleteModal id={row.id} />
-                  </TableCell>
-                </TableRow>
-              ))
+              aiInfo.data_sources
+                .filter((dataSource) => dataSource.namespace === namespace)
+                .map((row) => (
+                  <TableRow key={row.id}>
+                    <TableCell>{row.file_name}</TableCell>
+                    <TableCell>{row.namespace}</TableCell>
+                    <TableCell>{translateToUserFriendlyDate(row.last_modified)}</TableCell>
+                    <TableCell>
+                      <DeleteModal id={row.id} />
+                    </TableCell>
+                  </TableRow>
+                ))
             ) : // Display the loading component while waiting for data to load
             loading ? (
               <TableRow>

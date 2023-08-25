@@ -18,6 +18,7 @@ import { library } from "@fortawesome/fontawesome-svg-core";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import { loadStripe } from "@stripe/stripe-js/pure";
 import { Elements } from "@stripe/react-stripe-js";
+import ChatbotConfigDetail from "./screens/ChatbotConfigDetail";
 
 export default function App() {
   // Add Font Awesome icons to global library
@@ -90,6 +91,14 @@ export default function App() {
                   element={
                     <RequireAuth>
                       <ChangePassword />
+                    </RequireAuth>
+                  }
+                />
+                <Route
+                  path="chatbot/configure/:namespace"
+                  element={
+                    <RequireAuth>
+                      <ChatbotConfigDetail />
                     </RequireAuth>
                   }
                 />

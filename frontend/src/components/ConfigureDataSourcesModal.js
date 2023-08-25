@@ -32,9 +32,8 @@ const style = {
   p: 4,
 };
 
-export default function ConfigureDataSourcesModal() {
+export default function ConfigureDataSourcesModal({ namespace }) {
   const [open, setOpen] = React.useState(false);
-  const [namespace, setNamespace] = React.useState("");
   const [dense, setDense] = React.useState(true);
   const [secondary, setSecondary] = React.useState(false);
   const [fileNames, setFileNames] = React.useState([]);
@@ -47,9 +46,6 @@ export default function ConfigureDataSourcesModal() {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  const handleNamespaceChange = (event) => {
-    setNamespace(event.target.value);
-  };
   const handleFileChange = (event) => {
     // Get a list of files and file names
     const uploadedFiles = event.target.files;
@@ -122,23 +118,6 @@ export default function ConfigureDataSourcesModal() {
               </ListItem>
             ))}
           </List>
-
-          {/* Namespace selector */}
-          <Button>Add Namespace +</Button>
-          <FormControl fullWidth>
-            <InputLabel id="demo-simple-select-label">namespace</InputLabel>
-            <Select
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
-              value={namespace}
-              label="Namespace"
-              onChange={handleNamespaceChange}
-            >
-              <MenuItem value={"test7"}>test7</MenuItem>
-              <MenuItem value={"test8"}>test8</MenuItem>
-              <MenuItem value={"test9"}>test9</MenuItem>
-            </Select>
-          </FormControl>
 
           <Typography id="modal-modal-description" sx={{ mt: 2 }}>
             Saving will add the uploaded data to the information used by your chatbot configured with the same

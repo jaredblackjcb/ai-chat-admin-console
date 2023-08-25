@@ -20,7 +20,7 @@ export const encodeFiles = (formData, namespace, userId) => async (dispatch) => 
     dispatch({
       type: ENCODE_FILES_REQUEST,
     });
-    const { data } = await axios.post("api/chat/encode/files", formData, {
+    const { data } = await axios.post("/api/chat/encode/files", formData, {
       headers: { "Content-Type": "multipart/form-data", namespace: namespace, userId: userId },
     });
     dispatch({
@@ -40,7 +40,7 @@ export const fetchNamespaces = (userId) => async (dispatch) => {
     dispatch({
       type: FETCH_NAMESPACES_REQUEST,
     });
-    const { data } = await axios.get("api/chat/namespaces/" + userId);
+    const { data } = await axios.get("/api/chat/namespaces/" + userId);
     dispatch({
       type: FETCH_NAMESPACES_SUCCESS,
       payload: data,
@@ -58,7 +58,7 @@ export const fetchDataSources = (userId) => async (dispatch) => {
     dispatch({
       type: FETCH_DATA_SOURCES_REQUEST,
     });
-    const { data } = await axios.get("api/chat/dataSources/" + userId);
+    const { data } = await axios.get("/api/chat/dataSources/" + userId);
     dispatch({
       type: FETCH_DATA_SOURCES_SUCCESS,
       payload: data,
@@ -77,7 +77,7 @@ export const deleteDataSource = (dataSourceId, userId, fileName, namespace) => a
       type: DELETE_DATA_SOURCE_REQUEST,
     });
     console.log("Headers: ", { userId: userId });
-    const response = await axios.delete(`api/chat/file/${fileName}/namespace/${namespace}/delete`, {
+    const response = await axios.delete(`/api/chat/file/${fileName}/namespace/${namespace}/delete`, {
       headers: { userid: userId },
     });
     dispatch({
