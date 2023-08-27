@@ -13,8 +13,8 @@ from django.conf import settings
 
 class PineconeUtils():
     
-    def __init__(self, user_id, namespace, context=None):
-        self.namespace = user_id + '-' + namespace
+    def __init__(self, bot_id: str, namespace: str, context=None):
+        self.namespace = bot_id + '-' + namespace
         self.context = context # optional conversation context
         self.index_name = os.environ.get('PINECONE_INDEX')
         pinecone.init(api_key=os.environ.get('PINECONE_API_KEY'),

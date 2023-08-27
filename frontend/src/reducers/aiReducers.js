@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialAiState = {
   loading: false,
   error: null,
-  data_sources: [],
+  dataSources: [],
 };
 
 const aiInfoFromStorage = localStorage.getItem("aiInfo") ? JSON.parse(localStorage.getItem("aiInfo")) : initialAiState;
@@ -13,52 +13,44 @@ export const aiSlice = createSlice({
   name: "ai",
   initialState: { aiInfo: aiInfoFromStorage },
   reducers: {
+    createBotRequest(state) {
+      return { ...state, loading: true, error: null };
+    },
+    createBotSuccess(state, action) {
+      return { ...state, loading: false, error: null };
+    },
+    createBotError(state, action) {
+      return { ...state, loading: false, error: action.payload };
+    },
+    fetchBotsRequest(state) {
+      return { ...state, loading: true, error: null };
+    },
+    fetchBotsSuccess(state, action) {
+      return { ...state, loading: false, error: null, bots: action.payload };
+    },
     encodeFilesRequest(state) {
-      return { loading: true };
+      return { ...state, loading: true, error: null };
     },
     encodeFilesSuccess(state, action) {
-      return { loading: false, aiInfo: action.payload };
+      return { ...state, loading: false, error: null };
     },
     encodeFilesError(state, action) {
-      return { loading: false, error: action.payload };
-    },
-    fetchNamespacesRequest(state) {
-      return { loading: true };
-    },
-    fetchNamespacesSuccess(state, action) {
-      return { loading: false, aiInfo: action.payload };
-    },
-    fetchNamespacesError(state, action) {
-      return { loading: false, error: action.payload };
+      return { ...state, loading: false, error: action.payload };
     },
     fetchDataSourcesRequest(state) {
-      return { loading: true };
+      return { ...state, loading: true, error: null };
     },
     fetchDataSourcesSuccess(state, action) {
-      return { loading: false, aiInfo: action.payload };
+      return { ...state, loading: false, error: null, dataSources: action.payload };
     },
     fetchDataSourcesError(state, action) {
-      return { loading: false, error: action.payload };
+      return { ...state, loading: false, error: action.payload };
     },
     deleteDataSourceRequest(state) {
-      return { ...state, loading: true };
+      return { ...state, loading: true, error: null };
     },
     deleteDataSourceSuccess(state, action) {
-      const deletedItemId = action.payload.deletedItemId; // Assuming you get the ID of the deleted item from the payload
-      console.log(deletedItemId);
-      // Create a new array excluding the deleted item
-      const updatedDataSources = state.aiInfo?.data_sources.filter((dataSource) => dataSource.id !== deletedItemId);
-      console.log("data sources: ", state?.aiInfo?.data_sources);
-      console.log(updatedDataSources);
-      // Return the updated state with the modified dataSources array
-      return {
-        ...state,
-        loading: false,
-        aiInfo: {
-          ...state.aiInfo,
-          data_sources: updatedDataSources,
-        },
-      };
+      return { ...state, loading: false, error: null };
     },
     deleteDataSourceError(state, action) {
       return { loading: false, error: action.payload };

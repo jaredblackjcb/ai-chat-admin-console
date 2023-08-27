@@ -1,7 +1,12 @@
 from rest_framework import serializers
-from .models import ChatDataSource
+from .models import Bot, File
 
-class ChatDataSourceSerializer(serializers.ModelSerializer):
+class BotSerializer(serializers.ModelSerializer):
     class Meta:
-        model = ChatDataSource
+        model = Bot
+        fields = '__all__'
+
+class FileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = File
         fields = '__all__'

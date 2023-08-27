@@ -17,7 +17,7 @@ import FileUploadIcon from "@mui/icons-material/FileUpload";
 import LoadingButton from "@mui/lab/LoadingButton";
 import SaveIcon from "@mui/icons-material/Save";
 
-import { encodeFiles } from "../actions/aiActions";
+import { encodeFiles, fetchDataSources } from "../actions/aiActions";
 import { Grid } from "@mui/material";
 
 const style = {
@@ -32,7 +32,7 @@ const style = {
   p: 4,
 };
 
-export default function ConfigureDataSourcesModal({ namespace }) {
+export default function ConfigureDataSourcesModal({ botId, namespace }) {
   const [open, setOpen] = useState(false);
   const [dense, setDense] = useState(true);
   // List of file names
@@ -78,7 +78,8 @@ export default function ConfigureDataSourcesModal({ namespace }) {
       formData.append(`file${index}`, file);
     });
     try {
-      await dispatch(encodeFiles(formData, namespace, userId));
+      await dispatch(encodeFiles(formData, namespace, botId));
+      dispatch(fetchDataSources(botId));
       handleClose();
     } catch (error) {
       console.error(error);

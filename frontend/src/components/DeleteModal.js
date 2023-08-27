@@ -2,9 +2,10 @@ import { Box, Button, Modal, Typography } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteDataSource } from "../actions/aiActions";
+import { deleteDataSource, fetchDataSources } from "../actions/aiActions";
+import LoadingButton from "@mui/lab/LoadingButton/LoadingButton";
 
-export default function DeleteModal({ id }) {
+export default function DeleteModal({ botId, namespace, dataSourceId, fileName }) {
   const dispatch = useDispatch();
   const { loading, error } = useSelector((state) => state.aiInfo || {});
 
@@ -28,19 +29,17 @@ export default function DeleteModal({ id }) {
     p: 4,
   };
 
-  const dataSource = useSelector((state) => {
-    if (state.aiInfo && state.aiInfo.aiInfo.data_sources) {
-      console.log(state.aiInfo.aiInfo.data_sources.filter((dataSource) => dataSource.id === id));
-      return state.aiInfo.aiInfo.data_sources.filter((dataSource) => dataSource.id === id)[0];
-    } else {
-      return []; // Return an empty array or handle the absence of dataSources appropriately.
-    }
-  });
-
   // Define actions for dispatching the delete event
   const handleDelete = async (event) => {
     event.preventDefault();
-    dispatch(deleteDataSource(id, dataSource.user, dataSource.file_name, dataSource.namespace));
+    try {
+      // TODO: Change this to only use dataSourceId, get the other info from the backend
+      await dispatch(deleteDataSource(dataSourceId, botId, fileName, namespace));
+      await dispatch(fetchDataSources(botId));
+      handleClose();
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -48,18 +47,23 @@ export default function DeleteModal({ id }) {
       <Button onClick={handleOpen}>Delete</Button>
       <Modal open={open} onClose={handleClose} aria-labelledby="delete-modal" aria-describedby="delete-data-source">
         <Box sx={style}>
-          <Typography id="modal-modal-title" variant="h6" component="h2">
-            Delete {dataSource.file_name}? The contents of this file will no longer be available to reference in your
-            chatbot.
+          <Typography id="modal-modal-title" variant="h6" component="h2" sx={{ mb: 2 }}>
+            Delete {fileName}? The contents of this file will no longer be available to reference in your chatbot.
           </Typography>
-          <Button variant="outlined" startIcon={<DeleteIcon />} onClick={handleDelete}>
-            Delete
-          </Button>
-          <Button variant="contained" onClick={handleClose}>
+          <LoadingButton
+            loading={loading}
+            loadingPosition="start"
+            startIcon={<DeleteIcon />}
+            variant="contained"
+            onClick={handleDelete}
+            sx={{ marginRight: 2 }}
+          >
+            DELETE
+          </LoadingButton>
+          <Button variant="outlined" onClick={handleClose}>
             Cancel
           </Button>
           {error && <h1>{error}</h1>}
-          {loading && <h1>Loading...</h1>}
         </Box>
       </Modal>
     </Box>

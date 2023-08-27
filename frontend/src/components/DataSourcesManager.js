@@ -14,15 +14,14 @@ import { fetchDataSources } from "../actions/aiActions";
 import DeleteModal from "./DeleteModal";
 import { translateToUserFriendlyDate } from "../utils";
 
-export default function DataSourcesManager({ namespace }) {
+export default function DataSourcesManager({ botId, namespace }) {
   const dispatch = useDispatch();
-  const { loading, error, aiInfo } = useSelector((state) => state.aiInfo || {});
-  const userId = useSelector((state) => state.user?.userInfo?.id);
+  const { loading, error, dataSources } = useSelector((state) => state.aiInfo || {});
 
   useEffect(() => {
     // Fetch data sources when component mounts
-    dispatch(fetchDataSources(userId));
-  }, [dispatch, userId]);
+    dispatch(fetchDataSources(botId));
+  }, [dispatch, botId]);
 
   return (
     <Box>
@@ -38,18 +37,16 @@ export default function DataSourcesManager({ namespace }) {
           </TableHead>
           <TableBody>
             {/* Display data sources associated with the given namespace if they exist */}
-            {aiInfo && aiInfo.data_sources ? (
-              aiInfo.data_sources
-                .filter((dataSource) => dataSource.namespace === namespace)
-                .map((row) => (
-                  <TableRow key={row.id}>
-                    <TableCell>{row.file_name}</TableCell>
-                    <TableCell>{translateToUserFriendlyDate(row.last_modified)}</TableCell>
-                    <TableCell>
-                      <DeleteModal id={row.id} />
-                    </TableCell>
-                  </TableRow>
-                ))
+            {dataSources && dataSources.files ? (
+              dataSources.files.map((row) => (
+                <TableRow key={row.id}>
+                  <TableCell>{row.file_name}</TableCell>
+                  <TableCell>{translateToUserFriendlyDate(row.last_modified)}</TableCell>
+                  <TableCell>
+                    <DeleteModal botId={botId} namespace={namespace} dataSourceId={row.id} fileName={row.file_name} />
+                  </TableCell>
+                </TableRow>
+              ))
             ) : // Display the loading component while waiting for data to load
             loading ? (
               <TableRow>

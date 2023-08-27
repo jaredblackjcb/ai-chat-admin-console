@@ -95,7 +95,7 @@ export default function App() {
                   }
                 />
                 <Route
-                  path="chatbot/configure/:namespace"
+                  path="chatbot/configure/:botId"
                   element={
                     <RequireAuth>
                       <ChatbotConfigDetail />
