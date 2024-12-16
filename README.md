@@ -1,5 +1,5 @@
-# Sourdough SaaS
-SaaS app boilerplate built with a react frontend and django backend
+# AI Chat Admin Console
+Admin console for creating shareable context-aware chatbots to answer questions about documents.
 
 # Getting Started
 Run the frontend by navigating to the frontend directory and running 'npm install'.
